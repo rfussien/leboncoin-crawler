@@ -76,6 +76,8 @@ class AdCrawler extends CrawlerAbstract
     {
         isset($node) or $node = $this->crawler;
 
+        $info = [];
+
         $info['title'] = $node->filter('#ad_subject')->text();
 
         list($info['price'], $info['city'], $info['cp']) = $node
