@@ -95,12 +95,21 @@ class SearchResultCrawler extends CrawlerAbstract
             });
         $created_at = SearchResultDateTimeParser::toDt($date, $time);
 
-        $thumb = $node->filter('.image-and-nb > img')->attr('src');
+        $thumb = null;
+        if ($node->filter('.image-and-nb > img')->count()) {
+            $thumb = $node->filter('.image-and-nb > img')->attr('src') ?: null;
+        }
 
-        $nbImage = trim($node->filter('.image-and-nb > .nb > .value')->text());
+        $nbImage = null;
+        if ($node->filter('.image-and-nb > .nb > .value')->count()) {
+            $nbImage = trim($node->filter('.image-and-nb > .nb > .value')->text());
+        }
 
-        $placement = trim($node->filter('.placement')->text());
-        $placement = preg_replace('/\s+/', ' ', $placement);
+        $placement = null;
+        if ($node->filter('.placement')) {
+            $placement = trim($node->filter('.placement')->text());
+            $placement = preg_replace('/\s+/', ' ', $placement);
+        }
 
         $category = $node->filter('.detail > .category')->text();
         $category = preg_replace('/[\s()]+/', '', $category);
