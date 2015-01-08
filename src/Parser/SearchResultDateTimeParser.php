@@ -1,6 +1,7 @@
 <?php namespace Lbc\Parser;
 
 use Carbon\Carbon;
+use SebastianBergmann\Exporter\Exception;
 
 class SearchResultDateTimeParser
 {
@@ -24,7 +25,7 @@ class SearchResultDateTimeParser
      *
      * @param $date
      * @param $time
-     * @return Carbon|static
+     * @return Carbon
      */
     public static function toDt($date, $time)
     {
@@ -40,7 +41,7 @@ class SearchResultDateTimeParser
 
                 $dt = new Carbon();
                 $dt->day($day);
-                $dt->month(static::getMonthNumber($month));
+                $dt->month(self::getMonthNumber($month));
         }
 
         // Set up the time
@@ -55,6 +56,10 @@ class SearchResultDateTimeParser
         return $dt;
     }
 
+    /**
+     * @param $month
+     * @return int
+     */
     private static function getMonthNumber($month)
     {
         foreach (self::$month as $monthName => $monthNumber) {
@@ -63,6 +68,6 @@ class SearchResultDateTimeParser
             }
         }
 
-        return false;
+        throw new \InvalidArgumentException('Unable to parse the month');
     }
 }

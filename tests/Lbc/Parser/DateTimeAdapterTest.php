@@ -37,4 +37,13 @@ class SearchResultDateTimeParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $dt);
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unable to parse the month
+     */
+    public function testItThrowAnExceptionWhenTheMonthFormatIsWrong()
+    {
+        SearchResultDateTimeParser::toDt("29 whatever", "7:22");
+    }
 }
