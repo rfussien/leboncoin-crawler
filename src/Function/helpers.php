@@ -3,8 +3,8 @@
 if (!function_exists('toAscii')) {
     /**
      * Replace accent and remove unknown chars
-     * 
-     * @param $string
+     *
+     * @param string $string
      * @return string
      */
     function toAscii($string)
@@ -17,14 +17,14 @@ if (!function_exists('toAscii')) {
 
         $string = @iconv(mb_detect_encoding($string), 'ASCII//TRANSLIT', $string);
 
-        $ret = array_map(
-            function ($chr) use ($alnumPattern) {
-                if (preg_match($alnumPattern, $chr)) {
-                    return $chr;
-                }
-            },
-            str_split($string)
-        );
+        $ret = array_map(function ($chr) use ($alnumPattern) {
+
+            if (preg_match($alnumPattern, $chr)) {
+                return $chr;
+            }
+            return '';
+            
+        }, str_split($string));
 
         return implode($ret);
     }

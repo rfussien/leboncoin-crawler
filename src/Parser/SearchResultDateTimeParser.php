@@ -1,7 +1,6 @@
 <?php namespace Lbc\Parser;
 
 use Carbon\Carbon;
-use SebastianBergmann\Exporter\Exception;
 
 class SearchResultDateTimeParser
 {
