@@ -90,7 +90,7 @@ class SearchResultCrawler extends CrawlerAbstract
         $price = preg_replace('/[^\d]/', '', $price);
 
         list($date, $time) = $node->filter('.date > div')
-            ->each(function ($node, $i) {
+            ->each(function ($node) {
                 return $node->text();
             });
         $created_at = SearchResultDateTimeParser::toDt($date, $time);
