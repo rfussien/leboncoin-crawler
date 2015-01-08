@@ -52,7 +52,7 @@ class SearchResultDateTimeParser
             $dt->year--;
         }
 
-        return $dt;
+        return $dt->format('Y-m-d H:m');
     }
 
     /**

@@ -6,8 +6,11 @@ class SearchResultDateTimeParserTest extends \PHPUnit_Framework_TestCase
 {
     public function testAujoudHuiReturnTheDateOfToday()
     {
-        $dt = SearchResultDateTimeParser::toDt("Aujourd'hui", "7:22");
-        $expected = Carbon::today()->hour(7)->minute(22);
+        $now = Carbon::now();
+
+        $dt = SearchResultDateTimeParser::toDt("Aujourd'hui", "{$now->hour}:{$now->minute}");
+
+        $expected = Carbon::today()->hour($now->hour)->minute($now->minute)->format('Y-m-d H:m');
 
         $this->assertEquals($expected, $dt);
     }
@@ -15,7 +18,7 @@ class SearchResultDateTimeParserTest extends \PHPUnit_Framework_TestCase
     public function testHierReturnTheDateOfYesterday()
     {
         $dt = SearchResultDateTimeParser::toDt("Hier", "7:22");
-        $expected = Carbon::yesterday()->hour(7)->minute(22);
+        $expected = Carbon::yesterday()->hour(7)->minute(22)->format('Y-m-d H:m');
 
         $this->assertEquals($expected, $dt);
     }
@@ -34,6 +37,8 @@ class SearchResultDateTimeParserTest extends \PHPUnit_Framework_TestCase
         if ($expected > Carbon::now()) {
             $expected->year--;
         }
+
+        $expected = $expected->format('Y-m-d H:m');
 
         $this->assertEquals($expected, $dt);
     }
