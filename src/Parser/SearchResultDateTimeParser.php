@@ -19,6 +19,13 @@ class SearchResultDateTimeParser
         'décembre'  => 12
     ];
 
+    /**
+     * Return a DateTime from a date string and a time string
+     *
+     * @param $date
+     * @param $time
+     * @return Carbon|static
+     */
     public static function toDt($date, $time)
     {
         switch ($date) {
@@ -50,14 +57,12 @@ class SearchResultDateTimeParser
 
     private static function getMonthNumber($month)
     {
-        return array_values(
-            array_filter(
-                static::$month,
-                function ($monthName) use ($month) {
-                    return preg_match("/$month/", $monthName);
-                },
-                ARRAY_FILTER_USE_KEY
-            )
-        )[0];
+        foreach (static::$month as $monthName => $monthNumber) {
+            if (preg_match("/$month/", $monthName)) {
+                return $monthNumber;
+            }
+        }
+
+        return false;
     }
 }
