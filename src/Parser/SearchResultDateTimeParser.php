@@ -57,7 +57,7 @@ class SearchResultDateTimeParser
 
     private static function getMonthNumber($month)
     {
-        foreach (static::$month as $monthName => $monthNumber) {
+        foreach (self::$month as $monthName => $monthNumber) {
             if (preg_match("/$month/", $monthName)) {
                 return $monthNumber;
             }

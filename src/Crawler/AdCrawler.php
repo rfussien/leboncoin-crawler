@@ -28,7 +28,9 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getThumbs(Crawler $node = null)
     {
-        isset($node) or $node = $this->crawler;
+        if (!($node instanceof Crawler)) {
+            $node = $this->crawler;
+        }
 
         $pictures = [];
 
@@ -53,7 +55,9 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getPictures(Crawler $node = null)
     {
-        isset($node) or $node = $this->crawler;
+        if (!($node instanceof Crawler)) {
+            $node = $this->crawler;
+        }
 
         $pictures = [];
 
@@ -74,7 +78,9 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getCommonInfo(Crawler $node = null)
     {
-        isset($node) or $node = $this->crawler;
+        if (!($node instanceof Crawler)) {
+            $node = $this->crawler;
+        }
 
         $info = [];
 
@@ -99,7 +105,9 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getDescription(Crawler $node = null)
     {
-        isset($node) or $node = $this->crawler;
+        if (!($node instanceof Crawler)) {
+            $node = $this->crawler;
+        }
 
         return trim($node->filter('.AdviewContent > .content')->text());
     }
@@ -111,7 +119,9 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getCriterias(Crawler $node = null)
     {
-        isset($node) or $node = $this->crawler;
+        if (!($node instanceof Crawler)) {
+            $node = $this->crawler;
+        }
 
         $criterias = [];
         $node
