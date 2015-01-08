@@ -1,6 +1,7 @@
 {
     "name": "rfussien/leboncoin-crawler",
     "description": "Web scrapping is a bad practice",
+    "license": "MIT",
     "authors": [{
         "name": "Remi FUSSIEN",
         "email": "remi.fussien@gmail.com"
