@@ -132,7 +132,7 @@ class AdCrawler extends CrawlerAbstract
      * @param Crawler $node
      * @return mixed
      */
-    private static function parseCriteriaName(Crawler $node)
+    protected static function parseCriteriaName(Crawler $node)
     {
         return preg_replace(
             '/\s/',
@@ -151,7 +151,7 @@ class AdCrawler extends CrawlerAbstract
      * @param Crawler $node
      * @return string
      */
-    private static function parseCriteriaValue(Crawler $node)
+    protected static function parseCriteriaValue(Crawler $node)
     {
         return trim(
             preg_replace(
