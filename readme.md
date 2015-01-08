@@ -1,6 +1,10 @@
 Crawler for leboncoin.fr
 ========================
 
+[![Build Status](https://api.travis-ci.org/rfussien/leboncoin-crawler.svg)](https://travis-ci.org/rfussien/leboncoin-crawler/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler/badges/quality-score.png)](https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler/)
+[![License](https://poser.pugx.org/rfussien/leboncoin-crawler/license.svg)](https://packagist.org/packages/rfussien/leboncoin-crawler)
+
 This is a small crawler package for the site [leboncoin.fr](http://www.leboncoin.fr).
 
 ## Why ?

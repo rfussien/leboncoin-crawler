@@ -1,6 +1,6 @@
 {
     "name": "rfussien/leboncoin-crawler",
-    "description": "Web scrapping is a bad practice",
+    "description": "Makes easy the data extraction from leboncoin.fr",
     "license": "MIT",
     "authors": [{
         "name": "Remi FUSSIEN",
