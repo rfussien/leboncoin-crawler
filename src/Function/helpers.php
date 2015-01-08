@@ -6,7 +6,7 @@
  * @return string
  */
 if (!function_exists('toAscii')) {
-    function toAscii($string, $replacement = '')
+    function toAscii($string)
     {
         $alnumPattern = '/^[a-zA-Z0-9 ]+$/';
 
