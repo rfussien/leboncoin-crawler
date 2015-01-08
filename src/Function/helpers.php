@@ -1,11 +1,12 @@
 <?php
 
-/**
- * Replace accent and remove unknown chars
- *
- * @return string
- */
 if (!function_exists('toAscii')) {
+    /**
+     * Replace accent and remove unknown chars
+     * 
+     * @param $string
+     * @return string
+     */
     function toAscii($string)
     {
         $alnumPattern = '/^[a-zA-Z0-9 ]+$/';

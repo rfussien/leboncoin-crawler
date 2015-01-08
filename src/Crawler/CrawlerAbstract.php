@@ -8,7 +8,6 @@ abstract class CrawlerAbstract
 
     /**
      * @param $payload
-     * @param null $url
      */
     public function __construct($payload = null)
     {

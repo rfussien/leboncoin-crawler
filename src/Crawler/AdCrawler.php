@@ -101,7 +101,7 @@ class AdCrawler extends CrawlerAbstract
      * Return the description
      *
      * @param Crawler $node
-     * @return array
+     * @return string
      */
     public function getDescription(Crawler $node = null)
     {
@@ -140,7 +140,7 @@ class AdCrawler extends CrawlerAbstract
      * Transform the criteria's name into a snake_case string
      *
      * @param Crawler $node
-     * @return mixed
+     * @return string
      */
     protected static function parseCriteriaName(Crawler $node)
     {
