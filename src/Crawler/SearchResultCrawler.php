@@ -12,10 +12,14 @@ class SearchResultCrawler extends CrawlerAbstract
      */
     public function getNbAds()
     {
-        return (int)$this->crawler
+        $nbAds = $this->crawler
             ->filter('nav > ul.navlist.type > li.selected > span.value > b')
             ->first()
             ->text();
+
+        $nbAds = preg_replace('/\s+/', '', $nbAds);
+        
+        return (int) $nbAds;
     }
 
     /**
@@ -25,7 +29,7 @@ class SearchResultCrawler extends CrawlerAbstract
      */
     public function getNbPages()
     {
-        return (int)ceil($this->getNbAds() / 35);
+        return (int) ceil($this->getNbAds() / 35);
     }
 
     /**
@@ -82,7 +86,8 @@ class SearchResultCrawler extends CrawlerAbstract
     {
         $url = $node->attr('href');
 
-        $id = preg_replace('/\/\w+\/(\d+)\.htm/', '$1', parse_url($url)['path']);
+        $id = preg_replace('/\/\w+\/(\d+)\.htm/', '$1',
+            parse_url($url)['path']);
 
         $title = $node->attr('title');
 
@@ -114,7 +119,7 @@ class SearchResultCrawler extends CrawlerAbstract
         $category = $node->filter('.detail > .category')->text();
         $category = preg_replace('/[\s()]+/', '', $category);
 
-        $ads = (object) [
+        $ads = (object)[
             'id'         => $id,
             'title'      => $title,
             'price'      => $price,

@@ -5,16 +5,26 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
 {
-    protected $url;
-
     protected $searchContent;
+    protected $searchContent2;
 
     protected $adContent;
 
     public function setUp()
     {
-        $this->url = "http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=100000&fu=2&gb=2";
+        /*
+         * http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=100000&fu=2&gb=2
+         */
         $this->searchContent = file_get_contents(dirname(dirname(__DIR__)) . '/content/search_result.html');
+
+        /**
+         * http://www.leboncoin.fr/telephonie/offres/basse_normandie/?f=a&th=1&q=iphone
+         */
+        $this->searchContent2 = file_get_contents(dirname(dirname(__DIR__)) . '/content/search_result2.html');
+
+        /**
+         * http://www.leboncoin.fr/voitures/753398357.htm?ca=4_s
+         */
         $this->adContent = file_get_contents(dirname(dirname(__DIR__)) . '/content/search_result_ad.html');
     }
 
@@ -38,6 +48,11 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(650, $search->getNbAds());
         $this->assertEquals(19, $search->getNbPages());
+
+        $search = new SearchResultCrawler($this->searchContent2);
+
+        $this->assertEquals(1801, $search->getNbAds());
+        $this->assertEquals(52, $search->getNbPages());
     }
 
     public function testTheInformationOfAnAdAreCorrectlyExtracted()
