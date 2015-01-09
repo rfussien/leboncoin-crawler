@@ -43,14 +43,7 @@ class SearchResultUrlParser
      */
     public function next()
     {
-        if ($this->current()->getQuery()['o'] >= $this->nbPages) {
-            return null;
-        }
-
-        $query = $this->current()->getQuery();
-        $query['o'] += 1;
-
-        return $this->url->setQuery($query);
+        return $this->getIndexUrl(+1);
     }
 
     /**
@@ -60,13 +53,21 @@ class SearchResultUrlParser
      */
     public function previous()
     {
+        return $this->getIndexUrl(-1);
+    }
+
+    public function getIndexUrl($index)
+    {
         if ($this->current()->getQuery()['o'] == 1) {
             return null;
         }
 
-        $query = $this->current()->getQuery();
-        $query['o'] -= 1;
+        if ($this->current()->getQuery()['o'] >= $this->nbPages) {
+            return null;
+        }
 
+        $query = $this->current()->getQuery();
+        $query['o'] += $index;
 
         return $this->url->setQuery($query);
     }
