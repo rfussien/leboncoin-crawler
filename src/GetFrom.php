@@ -48,10 +48,34 @@ class GetFrom
      * @param $url
      * @return array
      */
-    public static function ad($url)
+    public static function adByUrl($url)
     {
         $adData = new AdCrawler(file_get_contents($url));
 
         return $adData->getAll();
+    }
+
+    /**
+     * Dynamique method to retrive the data by url OR id and category
+     * 
+     * @return bool|mixed
+     */
+    public static function ad()
+    {
+        if (func_num_args() == 1) {
+            return call_user_func_array(
+                __NAMESPACE__ . '\GetFrom::adByUrl',
+                func_get_args()
+            );
+        }
+
+        if (func_num_args() == 2) {
+            return call_user_func_array(
+                __NAMESPACE__ . '\GetFrom::adById',
+                func_get_args()
+            );
+        }
+
+        return false;
     }
 }
