@@ -67,6 +67,19 @@ class SearchResultUrlParserTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expected, $urlParser->getNav());
+
+        $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/?o=1', 3);
+
+        $expected = [
+            'page' => 1,
+            'links' => [
+                'previous' => '',
+                'current'  => 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?o=1',
+                'next'     => 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?o=2',
+            ]
+        ];
+
+        $this->assertEquals($expected, $urlParser->getNav());
     }
 
     public function testItReturnTheCorrectCategory()

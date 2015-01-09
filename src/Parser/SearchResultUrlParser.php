@@ -43,6 +43,10 @@ class SearchResultUrlParser
      */
     public function next()
     {
+        if ($this->current()->getQuery()['o'] >= $this->nbPages) {
+            return null;
+        }
+
         return $this->getIndexUrl(+1);
     }
 
@@ -53,19 +57,15 @@ class SearchResultUrlParser
      */
     public function previous()
     {
+        if ($this->current()->getQuery()['o'] == 1) {
+            return null;
+        }
+
         return $this->getIndexUrl(-1);
     }
 
     public function getIndexUrl($index)
     {
-        if ($this->current()->getQuery()['o'] == 1) {
-            return null;
-        }
-
-        if ($this->current()->getQuery()['o'] >= $this->nbPages) {
-            return null;
-        }
-
         $query = $this->current()->getQuery();
         $query['o'] += $index;
 
