@@ -23,16 +23,41 @@ The second problem is that saving a search is really a pain on the actual site.
 All the searches you want to save give one single result page. That's pretty dumb,
 but anyway.
 
-And the third and last problem is that the you are forced to use selected values
+And the third and last problem is that you are forced to use selected values
 with some criterias. For example, when I was looking for a motorcycle, I was
 looking for those with a bigger engine than 1200cc. The fact that the biggest
 value available in the input is 1000cc and because there are tons of ads with
-1000cc motorcycle made search much more complicated. I did send a mail to ask
-for an additional value, but I didn't get any answer (which I didn't expect
+1000cc motorcycle, it made search much more complicated. I did send an email to
+ask for an additional value, but I didn't get any answer (which I didn't expect
 anyway). So I had to change the value in the query string every single request...
 What a waste of time...
 
+So for all those little reasons, I decided to write my good old web scraper to
+be able to extract the data from the site to anywhere (a DB, an array, a json,
+an api, who knows...).
+
 ## Installation
 
-I'll write how it works later... But you can have a look to the unit test to
-get it.
+```bash
+composer install "rfussien/leboncoin-crawler"
+```
+
+## Usage
+
+**Super easy !!!**
+
+### Get the structured data from a search result page
+
+```php
+Lbc\GetFrom::search('<search_result_url>');
+```
+
+### Get the structured data from an ad
+
+```php
+Lbc\GetFrom::ad('<ad_url>');
+// or
+Lbc\GetFrom::ad('<ad_id>', '<ad_category>');
+```
+
+There are a bunch of features if you digg a bit in the sources.
