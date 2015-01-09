@@ -1,20 +1,42 @@
 <?php namespace Lbc;
 
+use GuzzleHttp\Client;
 use Lbc\Crawler\AdCrawler;
 use Lbc\Crawler\SearchResultCrawler;
 use Lbc\Parser\SearchResultUrlParser;
 
 class GetFrom
 {
+    protected $httpClient;
+
+    public function __construct()
+    {
+        $this->httpClient = new Client();
+    }
+
+    /**
+     * Return the http client
+     * (usefull to mock the response for unit testing)
+     *
+     * @return Client
+     */
+    public function getHttpClient()
+    {
+        return $this->httpClient;
+    }
+
     /**
      * retrieve the search result data from the given url
      *
      * @param $url
      * @return array
      */
-    public static function search($url)
+    public function search($url)
     {
-        $searchData = new SearchResultCrawler(file_get_contents($url));
+        $searchData = new SearchResultCrawler(
+            (string) $this->httpClient->get($url)->getBody()
+        );
+
         $url = new SearchResultUrlParser($url, $searchData->getNbPages());
 
         $sumarize = [
@@ -25,7 +47,7 @@ class GetFrom
             'search_area' => $url->getSearchArea(),
             'sort_by'     => $url->getSortType(),
             'type'        => $url->getType(),
-            'ads'         => $searchData->getAds(),
+            'ads'         => $searchData->getAdsId(),
         ];
 
         return array_merge($url->getNav(), $sumarize);
@@ -37,9 +59,9 @@ class GetFrom
      * @param $url
      * @return array
      */
-    public static function adById($id, $category)
+    public function adById($id, $category)
     {
-        return static::ad("http://www.leboncoin.fr/{$category}/{$id}.htm");
+        return $this->ad("http://www.leboncoin.fr/{$category}/{$id}.htm");
     }
 
     /**
@@ -48,34 +70,30 @@ class GetFrom
      * @param $url
      * @return array
      */
-    public static function adByUrl($url)
+    public function adByUrl($url)
     {
-        $adData = new AdCrawler(file_get_contents($url));
+        $adData = new AdCrawler(
+            (string) $this->httpClient->get($url)->getBody()
+        );
 
         return $adData->getAll();
     }
 
     /**
      * Dynamique method to retrive the data by url OR id and category
-     * 
+     *
      * @return bool|mixed
      */
-    public static function ad()
+    public function ad()
     {
         if (func_num_args() == 1) {
-            return call_user_func_array(
-                __NAMESPACE__ . '\GetFrom::adByUrl',
-                func_get_args()
-            );
+            return call_user_func_array([$this, 'adByUrl'], func_get_args());
         }
 
         if (func_num_args() == 2) {
-            return call_user_func_array(
-                __NAMESPACE__ . '\GetFrom::adById',
-                func_get_args()
-            );
+            return call_user_func_array([$this, 'adById'], func_get_args());
         }
 
-        return false;
+        throw new \InvalidArgumentException('Bad number of argument');
     }
 }

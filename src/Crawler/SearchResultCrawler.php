@@ -18,7 +18,7 @@ class SearchResultCrawler extends CrawlerAbstract
             ->text();
 
         $nbAds = preg_replace('/\s+/', '', $nbAds);
-        
+
         return (int) $nbAds;
     }
 
@@ -43,7 +43,7 @@ class SearchResultCrawler extends CrawlerAbstract
 
         $this->crawler->filter('div.list-lbc > a')
             ->each(function ($node) use (&$ads) {
-                $ad = $this->getAd($node);
+                $ad = (new SearchResultAdCrawler($node))->getAll();
                 $ads [$ad->id] = $ad;
             });
 
@@ -51,86 +51,19 @@ class SearchResultCrawler extends CrawlerAbstract
     }
 
     /**
-     * Return a parsed ads
+     * Return the Ad's ID
      *
-     * At the moment I'm writing this piece of code, an ads follow this
-     * structure:
-     *     <a href="http://www.leboncoin.fr/{{ $category }}/{{ $id }}.htm?ca=4_s" title="{{ $title }}">
-     *         <div class="lbc">
-     *             <div class="date">
-     *                 <div>{{ $date }}</div>
-     *                 <div>{{ $time }}</div>
-     *             </div>
-     *             <div class="image">
-     *                 <div class="image-and-nb">
-     *                     <img src="{{ $imageThumbUrl }}" alt="{{ $title }}">
-     *                     <div class="nb">
-     *                         <div class="top radius">&nbsp;</div>
-     *                         <div class="value radius">{{ $nbImages}}</div>
-     *                     </div>
-     *                 </div>
-     *             </div>
-     *             <div class="detail">
-     *                 <div class="title">{{ $title }}</div>
-     *                 <div class="category">{{ $pro }}</div>
-     *                 <div class="placement">{{ $placement }}</div>
-     *                 <div class="price">{{ $price }}&nbsp;€</div>
-     *             </div>
-     *         </div>
-     *     </a>
-     *
-     * @param $node
      * @return array
      */
-    public function getAd(Crawler $node)
+    public function getAdsId()
     {
-        $url = $node->attr('href');
+        $adsID = array();
 
-        $id = preg_replace('/\/\w+\/(\d+)\.htm/', '$1',
-            parse_url($url)['path']);
-
-        $title = $node->attr('title');
-
-        $price = $node->filter('.price')->count() ? trim($node->filter('.price')->text()) : null;
-        $price = preg_replace('/[^\d]/', '', $price);
-
-        list($date, $time) = $node->filter('.date > div')
-            ->each(function ($node) {
-                return $node->text();
+        $this->crawler->filter('div.list-lbc > a')
+            ->each(function ($node) use (&$adsID) {
+                $adsID [] = (new SearchResultAdCrawler($node))->getId();
             });
-        $created_at = SearchResultDateTimeParser::toDt($date, $time);
 
-        $thumb = null;
-        if ($node->filter('.image-and-nb > img')->count()) {
-            $thumb = $node->filter('.image-and-nb > img')->attr('src') ?: null;
-        }
-
-        $nbImage = null;
-        if ($node->filter('.image-and-nb > .nb > .value')->count()) {
-            $nbImage = trim($node->filter('.image-and-nb > .nb > .value')->text());
-        }
-
-        $placement = null;
-        if ($node->filter('.placement')) {
-            $placement = trim($node->filter('.placement')->text());
-            $placement = preg_replace('/\s+/', ' ', $placement);
-        }
-
-        $category = $node->filter('.detail > .category')->text();
-        $category = preg_replace('/[\s()]+/', '', $category);
-
-        $ads = (object)[
-            'id'         => $id,
-            'title'      => $title,
-            'price'      => $price,
-            'url'        => $url,
-            'created_at' => $created_at,
-            'thumb'      => $thumb,
-            'nb_image'   => $nbImage,
-            'placement'  => $placement,
-            'pro'        => ($category == 'pro'),
-        ];
-
-        return $ads;
+        return $adsID;
     }
 }

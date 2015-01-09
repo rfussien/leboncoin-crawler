@@ -1,6 +1,5 @@
 <?php namespace Lbc\Crawler;
 
-use Lbc\Parser\SearchResultDateTimeParser;
 use Symfony\Component\DomCrawler\Crawler;
 
 class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
@@ -55,25 +54,21 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(52, $search->getNbPages());
     }
 
-    public function testTheInformationOfAnAdAreCorrectlyExtracted()
+    public function testTheAdsId()
     {
         $search = new SearchResultCrawler($this->searchContent);
 
-        $node = (new Crawler($this->adContent))->filter('.list-lbc > a')->first();
-
-        $expected = (object)[
-            'id'         => '753398357',
-            'title'      => 'Volkswagen TOUAREG RLINE 245ch V6',
-            'price'      => '49990',
-            'url'        => 'http://www.leboncoin.fr/voitures/753398357.htm?ca=4_s',
-            'created_at' => SearchResultDateTimeParser::toDt('5 jan', '19:58'),
-            'thumb'      => 'http://193.164.197.60/thumbs/0a3/0a3d6148ed12dfa159bd124810f3bfd612d23e5f.jpg',
-            'nb_image'   => '3',
-            'placement'  => 'Colleville-Montgomery / Calvados',
-            'pro'        => true,
+        $expected = [
+            '753862363', '753850295', '753843597', '753832063', '753825535',
+            '753824979', '729205464', '742650820', '750621938', '690318904',
+            '753766957', '753764441', '742651186', '753759783', '748237410',
+            '729132192', '753726642', '753723041', '702115601', '733979787',
+            '728015610', '746360177', '744534260', '691276807', '753354997',
+            '691269084', '712484305', '662053785', '710735683', '750941004',
+            '746609897', '746990846', '753621234', '753606675', '746080950'
         ];
 
-        $this->assertEquals($expected, $search->getAd($node));
+        $this->assertEquals($expected, $search->getAdsId());
     }
 
     public function testCheckTheContentOfTheFirstAds()

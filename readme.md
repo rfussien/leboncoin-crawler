@@ -51,15 +51,15 @@ composer install "rfussien/leboncoin-crawler"
 ### Get the structured data from a search result page
 
 ```php
-Lbc\GetFrom::search('<search_result_url>');
+$data = (new Lbc\GetFrom)->search('<search_result_url>');
 ```
 
 ### Get the structured data from an ad
 
 ```php
-Lbc\GetFrom::ad('<ad_url>');
+$data = (new Lbc\GetFrom)->ad('<ad_url>');
 // or
-Lbc\GetFrom::ad('<ad_id>', '<ad_category>');
+$data = (new Lbc\GetFrom)->ad('<ad_id>', '<ad_category>');
 ```
 
 There are a bunch of features if you digg a bit in the sources.

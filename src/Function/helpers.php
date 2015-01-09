@@ -11,11 +11,11 @@ if (!function_exists('toAscii')) {
     {
         $alnumPattern = '/^[a-zA-Z0-9 ]+$/';
 
-        if (preg_match($alnumPattern, $string)) {
-            return $string;
-        }
-
-        $string = @iconv(mb_detect_encoding($string), 'ASCII//TRANSLIT', $string);
+        $string = @iconv(
+            mb_detect_encoding($string),
+            'ASCII//TRANSLIT',
+            $string
+        );
 
         $ret = array_map(function ($chr) use ($alnumPattern) {
 
@@ -23,7 +23,7 @@ if (!function_exists('toAscii')) {
                 return $chr;
             }
             return '';
-            
+
         }, str_split($string));
 
         return implode($ret);
