@@ -180,6 +180,17 @@ class SearchResultAdCrawler
         ];
     }
 
+    /**
+     * Return the field's value
+     *
+     * @param $node
+     * @param $defaultValue
+     * @param $callback
+     * @param string $funcName
+     * @param string $funcParam
+     *
+     * @return mixed
+     */
     private function getFieldValue(
         $node,
         $defaultValue,
