@@ -40,8 +40,6 @@ class SearchResultAdCrawler
     {
         $this->node = $node;
         $this->url = $node->attr('href');
-
-        return $this;
     }
 
     /**
