@@ -18,7 +18,8 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $getFrom = new GetFrom();
         $getFrom->getHttpClient()->getEmitter()->attach($mock);
 
-        $data = $getFrom->search('http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=100000&fu=2&gb=2');
+        $url = 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=100000&fu=2&gb=2';
+        $data = $getFrom->search($url);
 
         $this->assertEquals(1, $data['page']);
         $this->assertEquals(650, $data['total_ads']);
@@ -29,7 +30,6 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('all', $data['type']);
         $this->assertEquals(35, count($data['ads']));
     }
-
 
     public function testGetAdData()
     {
@@ -79,5 +79,22 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
     {
         $getFrom = new GetFrom();
         $getFrom->ad(1, 2, 3);
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testAnExceptionIsThrownWhenBadMethodAreCalled()
+    {
+        $getFrom = new GetFrom();
+        $getFrom->thisMethodCertainlyDoesntExists();
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testAnExceptionIsThrownWhenBadStaticMethodAreCalled()
+    {
+        GetFrom::thisMethodCertainlyDoesntExists();
     }
 }

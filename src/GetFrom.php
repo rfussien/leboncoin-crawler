@@ -31,7 +31,7 @@ class GetFrom
      * @param $url
      * @return array
      */
-    public function search($url)
+    private function search($url)
     {
         $searchData = new SearchResultCrawler(
             (string) $this->httpClient->get($url)->getBody()
@@ -59,7 +59,7 @@ class GetFrom
      * @param $url
      * @return array
      */
-    public function adById($id, $category)
+    private function adById($id, $category)
     {
         return $this->ad("http://www.leboncoin.fr/{$category}/{$id}.htm");
     }
@@ -70,7 +70,7 @@ class GetFrom
      * @param $url
      * @return array
      */
-    public function adByUrl($url)
+    private function adByUrl($url)
     {
         $adData = new AdCrawler(
             (string) $this->httpClient->get($url)->getBody()
@@ -84,7 +84,7 @@ class GetFrom
      *
      * @return bool|mixed
      */
-    public function ad()
+    private function ad()
     {
         if (func_num_args() == 1) {
             return call_user_func_array([$this, 'adByUrl'], func_get_args());
@@ -95,5 +95,32 @@ class GetFrom
         }
 
         throw new \InvalidArgumentException('Bad number of argument');
+    }
+
+    public function __call($method, $arguments)
+    {
+        if (method_exists($this, $method)) {
+            return call_user_func_array([$this, $method], $arguments);
+        }
+
+        throw new \BadMethodCallException();
+    }
+
+    /**
+     * Add a little bit of sugar
+     *
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public static function __callStatic($method, $arguments)
+    {
+        $instance = new self;
+
+        if (method_exists($instance, $method)) {
+            return call_user_func_array([$instance, $method], $arguments);
+        }
+
+        throw new \BadMethodCallException();
     }
 }
