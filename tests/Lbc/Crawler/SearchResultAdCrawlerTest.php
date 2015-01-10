@@ -30,7 +30,7 @@ class SearchResultAdCrawlerTest extends \PHPUnit_Framework_TestCase
             'thumb'      => 'http://193.164.197.60/thumbs/0a3/0a3d6148ed12dfa159bd124810f3bfd612d23e5f.jpg',
             'nb_image'   => 3,
             'placement'  => 'Colleville-Montgomery / Calvados',
-            'is_pro'        => true,
+            'type'       => 'pro',
         ];
 
         $this->assertEquals($expected, $search->getAll());

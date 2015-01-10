@@ -34,7 +34,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class SearchResultAdCrawler
 {
     protected $node;
-
+    protected $url;
 
     public function __construct(Crawler $node)
     {
@@ -56,24 +56,30 @@ class SearchResultAdCrawler
         return preg_replace('/\/\w+\/(\d+)\.htm/', '$1', $path);
     }
 
+    /**
+     * Return the title
+     *
+     * @return mixed
+     */
     public function getTitle()
     {
-        return trim($this->node->attr('title'));
+        return $this->getFieldValue($this->node, 0, function ($value) {
+            return trim($value);
+        }, 'attr', 'title');
     }
 
     /**
+     * Return the price
+     *
      * @return int
      */
     public function getPrice()
     {
         $node = $this->node->filter('.price');
 
-        $price = 0;
-        if ($node->count()) {
-            $price = (int) preg_replace('/[^\d]/', '', trim($node->text()));
-        }
-
-        return $price;
+        return $this->getFieldValue($node, 0, function ($value) {
+            return (int) preg_replace('/[^\d]/', '', trim($value));
+        });
     }
 
     /**
@@ -89,7 +95,7 @@ class SearchResultAdCrawler
     /**
      * Return the data and time the ad was created
      *
-     * @return string
+     * @return \Carbon\Carbon
      */
     public function getCreatedAt()
     {
@@ -111,12 +117,9 @@ class SearchResultAdCrawler
     {
         $node = $this->node->filter('.image-and-nb > img');
 
-        $thumb = null;
-        if ($node->count()) {
-            $thumb = $node->attr('src');
-        }
-
-        return $thumb;
+        return $this->getFieldValue($node, null, function ($value) {
+            return $value;
+        }, 'attr', 'src');
     }
 
     /**
@@ -128,12 +131,9 @@ class SearchResultAdCrawler
     {
         $node = $this->node->filter('.image-and-nb > .nb > .value');
 
-        $nbImage = 0;
-        if ($node->count()) {
-            $nbImage = (int)trim($node->text());
-        }
-
-        return $nbImage;
+        return $this->getFieldValue($node, 0, function ($value) {
+            return (int)trim($value);
+        });
     }
 
     /**
@@ -143,24 +143,26 @@ class SearchResultAdCrawler
     {
         $node = $this->node->filter('.placement');
 
-        $placement = '';
-        if ($node->count()) {
-            $placement = preg_replace('/\s+/', ' ', trim($node->text()));
-        }
-
-        return $placement;
+        return $this->getFieldValue($node, '', function ($value) {
+            return preg_replace('/\s+/', ' ', trim($value));
+        });
     }
 
-    public function getIsPro()
+    /**
+     *
+     * @return mixed
+     */
+    public function getType()
     {
         $node = $this->node->filter('.detail > .category');
-        $isPro = false;
 
-        if ($node->count()) {
-            $isPro = preg_replace('/[\s()]+/', '', $node->text());
-        }
+        return $this->getFieldValue($node, false, function ($value) {
+            if ('pro' == preg_replace('/[\s()]+/', '', $value)) {
+                return 'pro';
+            }
 
-        return ($isPro == 'pro');
+            return 'part';
+        });
     }
 
     public function getAll()
@@ -174,7 +176,21 @@ class SearchResultAdCrawler
             'thumb'      => $this->getThumb(),
             'nb_image'   => $this->getNbImage(),
             'placement'  => $this->getPlacement(),
-            'is_pro'     => $this->getIsPro(),
+            'type'       => $this->getType(),
         ];
+    }
+
+    private function getFieldValue(
+        $node,
+        $defaultValue,
+        $callback,
+        $funcName = 'text',
+        $funcParam = ''
+    ) {
+        if ($node->count()) {
+            return $callback($node->$funcName($funcParam));
+        }
+
+        return $defaultValue;
     }
 }
