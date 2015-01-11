@@ -31,6 +31,36 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(35, count($data['ads']));
     }
 
+    public function testGetTheDetailedAdInTheSearchResult()
+    {
+        $response = $this->getResponse(
+            dirname(__DIR__) . '/content/search_result.html'
+        );
+
+        $mock = new Mock();
+        $mock->addResponse($response);
+
+        $getFrom = new GetFrom();
+        $getFrom->getHttpClient()->getEmitter()->attach($mock);
+
+        $url = 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=100000&fu=2&gb=2';
+        $data = $getFrom->search($url, true);
+
+        $expected = (object)[
+            'id'         => '746080950',
+            'title'      => 'Volkswagen touareg 3.0 v6 tdi 240 carat edition',
+            'price'      => 24200,
+            'url'        => 'http://www.leboncoin.fr/voitures/746080950.htm?ca=4_s',
+            'created_at' => '2015-01-11 11:01',
+            'thumb'      => 'http://193.164.196.50/thumbs/aa5/aa55af1f945f02f8452fcfb2061d93b2d380eefd.jpg',
+            'nb_image'   => 7,
+            'placement'  => 'Caen / Calvados',
+            'type'       => 'part'
+        ];
+
+        $this->assertEquals($expected, array_pop($data['ads']));
+    }
+
     public function testGetAdData()
     {
         $response = $this->getResponse(
@@ -51,7 +81,8 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($dataById, $dataByUrl);
         $this->assertEquals(3, count($dataById['thumbs']));
         $this->assertEquals(3, count($dataById['pictures']));
-        $this->assertEquals('Maison 130 m² Fontaine Etoupefour', $dataById['title']);
+        $this->assertEquals('Maison 130 m² Fontaine Etoupefour',
+            $dataById['title']);
         $this->assertEquals('14790', $dataById['cp']);
         $this->assertEquals('Fontaine-Etoupefour', $dataById['city']);
         $this->assertEquals(240000, $dataById['price']);

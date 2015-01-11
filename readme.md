@@ -52,6 +52,8 @@ composer install "rfussien/leboncoin-crawler"
 
 ```php
 Lbc\GetFrom::search('<search_result_url>');
+// or with detailed ads
+Lbc\GetFrom::search('<search_result_url>', true);
 ```
 
 ### Get the structured data from an ad

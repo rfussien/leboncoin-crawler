@@ -29,15 +29,18 @@ class GetFrom
      * retrieve the search result data from the given url
      *
      * @param $url
+     * @param bool $detailedAd
      * @return array
      */
-    private function search($url)
+    private function search($url, $detailedAd = false)
     {
         $searchData = new SearchResultCrawler(
             (string) $this->httpClient->get($url)->getBody()
         );
 
         $url = new SearchResultUrlParser($url, $searchData->getNbPages());
+
+        $ads = ($detailedAd) ? $searchData->getAds() : $searchData->getAdsId();
 
         $sumarize = [
             'total_ads'   => $searchData->getNbAds(),
@@ -47,7 +50,7 @@ class GetFrom
             'search_area' => $url->getSearchArea(),
             'sort_by'     => $url->getSortType(),
             'type'        => $url->getType(),
-            'ads'         => $searchData->getAdsId(),
+            'ads'         => $ads,
         ];
 
         return array_merge($url->getNav(), $sumarize);
