@@ -38,6 +38,11 @@ So for all those little reasons, I decided to write my good old web scraper to
 be able to extract the data from the site to anywhere (a DB, an array, a json,
 an api, who knows...).
 
+## Requirements
+
+- PHP 5.4+ should do
+- [optional] PHPUnit to execute the test suite
+
 ## Installation
 
 ```bash
