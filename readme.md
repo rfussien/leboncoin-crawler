@@ -102,7 +102,7 @@ Lbc\GetFrom::search('<search_result_url>', true);
         }
     }
 }
-``
+```
 
 ### Get the structured data from an ad
 
