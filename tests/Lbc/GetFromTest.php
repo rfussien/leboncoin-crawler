@@ -80,10 +80,11 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $dataById = $getFrom->ad('745837877', 'ventes_immobilieres');
 
         $this->assertEquals($dataById, $dataByUrl);
+        $this->assertEquals('745837877', $dataById['id']);
+        $this->assertEquals('ventes_immobilieres', $dataById['category']);
         $this->assertEquals(3, count($dataById['thumbs']));
         $this->assertEquals(3, count($dataById['pictures']));
-        $this->assertEquals('Maison 130 m² Fontaine Etoupefour',
-            $dataById['title']);
+        $this->assertEquals('Maison 130 m² Fontaine Etoupefour', $dataById['title']);
         $this->assertEquals('14790', $dataById['cp']);
         $this->assertEquals('Fontaine-Etoupefour', $dataById['city']);
         $this->assertEquals(240000, $dataById['price']);

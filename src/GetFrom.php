@@ -3,6 +3,7 @@
 use GuzzleHttp\Client;
 use Lbc\Crawler\AdCrawler;
 use Lbc\Crawler\SearchResultCrawler;
+use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
 
 class GetFrom
@@ -75,11 +76,19 @@ class GetFrom
      */
     private function adByUrl($url)
     {
+        $urlParser = new AdUrlParser($url);
+
         $adData = new AdCrawler(
             (string) $this->httpClient->get($url)->getBody()
         );
 
-        return $adData->getAll();
+        return array_merge(
+            [
+                'id' => $urlParser->getId(),
+                'category'=>$urlParser->getCategory()
+            ],
+            $adData->getAll()
+        );
     }
 
     /**
