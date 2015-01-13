@@ -72,7 +72,7 @@ class AdCrawler extends CrawlerAbstract
     }
 
     /**
-     * Return the common informations
+     * Return the common informations (price, cp, city)
      *
      * @return array
      */
@@ -109,7 +109,12 @@ class AdCrawler extends CrawlerAbstract
             $node = $this->crawler;
         }
 
-        return trim($node->filter('.AdviewContent > .content')->text());
+        $description = $node->filter('.AdviewContent > .content')->html();
+        $description = str_replace("\n", ' ', $description);
+        $description = str_replace('<br><br>', "\n", $description);
+        $description = str_replace('<br>', ' ', $description);
+
+        return trim($description);
     }
 
     /**
