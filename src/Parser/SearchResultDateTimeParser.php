@@ -48,7 +48,7 @@ class SearchResultDateTimeParser
         $dt->hour = $hour;
         $dt->minute = $minute;
 
-        if ($dt > Carbon::now()) {
+        if ($dt->gt(Carbon::tomorrow()->subSecond())) {
             $dt->year--;
         }
 

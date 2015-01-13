@@ -3,6 +3,7 @@
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Subscriber\Mock;
+use Lbc\Parser\SearchResultDateTimeParser;
 
 class GetFromTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +52,7 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
             'title'      => 'Volkswagen touareg 3.0 v6 tdi 240 carat edition',
             'price'      => 24200,
             'url'        => 'http://www.leboncoin.fr/voitures/746080950.htm?ca=4_s',
-            'created_at' => '2015-01-11 11:01',
+            'created_at' => SearchResultDateTimeParser::toDt("Aujourd'hui", "11:01"),
             'thumb'      => 'http://193.164.196.50/thumbs/aa5/aa55af1f945f02f8452fcfb2061d93b2d380eefd.jpg',
             'nb_image'   => 7,
             'placement'  => 'Caen / Calvados',
