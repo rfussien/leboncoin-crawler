@@ -33,7 +33,7 @@ class GetFrom
      * @param bool $detailedAd
      * @return array
      */
-    private function search($url, $detailedAd = false)
+    public function search($url, $detailedAd = false)
     {
         $searchData = new SearchResultCrawler(
             (string) $this->httpClient->get($url)->getBody()
@@ -96,7 +96,7 @@ class GetFrom
      *
      * @return bool|mixed
      */
-    private function ad()
+    public function ad()
     {
         if (func_num_args() == 1) {
             return call_user_func_array([$this, 'adByUrl'], func_get_args());
