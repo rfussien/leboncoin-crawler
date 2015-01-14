@@ -99,7 +99,7 @@ class SearchResultAdCrawler
     {
         list($date, $time) = $this->node
             ->filter('.date > div')
-            ->each(function ($node) {
+            ->each(function (Crawler $node) {
                 return $node->text();
             });
 
@@ -190,7 +190,7 @@ class SearchResultAdCrawler
      * @return mixed
      */
     private function getFieldValue(
-        $node,
+        Crawler $node,
         $defaultValue,
         $callback,
         $funcName = 'text',

@@ -37,7 +37,7 @@ class AdCrawler extends CrawlerAbstract
 
         $node
             ->filter('#thumbs_carousel > a > span')
-            ->each(function ($link, $i) use (&$pictures) {
+            ->each(function (Crawler $link, $i) use (&$pictures) {
                 $pictures[$i] = preg_replace(
                     "/.*url\('(.*)'\);/",
                     '$1',
@@ -89,7 +89,7 @@ class AdCrawler extends CrawlerAbstract
 
         list($info['price'], $info['city'], $info['cp']) = $node
             ->filter('.lbcParams')->first()->filter('td')
-            ->each(function($param) {
+            ->each(function(Crawler $param) {
                 return $param->text();
             });
 
