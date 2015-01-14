@@ -1,8 +1,5 @@
 <?php namespace Lbc\Crawler;
 
-use Lbc\Parser\SearchResultDateTimeParser;
-use Symfony\Component\DomCrawler\Crawler;
-
 class SearchResultCrawler extends CrawlerAbstract
 {
     /**
