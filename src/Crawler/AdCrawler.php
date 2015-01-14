@@ -1,5 +1,6 @@
 <?php namespace Lbc\Crawler;
 
+use Lbc\Helper\Encoding;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdCrawler extends CrawlerAbstract
@@ -154,7 +155,7 @@ class AdCrawler extends CrawlerAbstract
             '_',
             trim(
                 strtolower(
-                    toAscii($node->filter('th')->text())
+                    Encoding::toAscii($node->filter('th')->text())
                 )
             )
         );

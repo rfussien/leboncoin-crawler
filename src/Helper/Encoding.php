@@ -1,13 +1,14 @@
-<?php
+<?php namespace Lbc\Helper;
 
-if (!function_exists('toAscii')) {
+class Encoding
+{
     /**
      * Replace accent and remove unknown chars
      *
      * @param string $string
      * @return string
      */
-    function toAscii($string)
+    public static function toAscii($string)
     {
         $alnumPattern = '/^[a-zA-Z0-9 ]+$/';
 
