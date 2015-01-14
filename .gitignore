@@ -1,7 +1,5 @@
 /vendor
 /node_modules
-.idea
 composer.phar
 composer.lock
 npm-debug.log
-.DS_Store
