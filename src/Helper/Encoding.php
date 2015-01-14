@@ -12,7 +12,7 @@ class Encoding
     {
         $alnumPattern = '/^[a-zA-Z0-9 ]+$/';
 
-        $string = @iconv(
+        $string = iconv(
             mb_detect_encoding($string),
             'ASCII//TRANSLIT',
             $string
