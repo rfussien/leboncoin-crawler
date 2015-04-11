@@ -8,6 +8,8 @@
  *
  * If this script is put inside a cron, such as,  * * * * * /usr/bin/php /home/username/leboncoin/email.php , then leboncoin
  * will be crawled every minute and you'll be immediately warned of a new result by email.
+ *
+ * Note: you should add swiftmailer to Composer: composer require "swiftmailer/swiftmailer"
  */
 
 require_once("../vendor/autoload.php");
