@@ -11,12 +11,14 @@ class SearchResultCrawler extends CrawlerAbstract
     {
         $nbAds = $this->crawler
             ->filter('nav > ul.navlist.type > li.selected > span.value > b')
-            ->first()
-            ->text();
+            ->first();
 
-        $nbAds = preg_replace('/\s+/', '', $nbAds);
+        if ($nbAds->count()) {
+            $nbAds = preg_replace('/\s+/', '', $nbAds->text());
+            return (int) $nbAds;
+        }
 
-        return (int) $nbAds;
+        return 0;
     }
 
     /**
