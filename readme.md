@@ -3,6 +3,7 @@ Crawler for leboncoin.fr
 
 [![Build Status](https://api.travis-ci.org/rfussien/leboncoin-crawler.svg)](https://travis-ci.org/rfussien/leboncoin-crawler/)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler/badges/quality-score.png)](https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler/)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/b9916e36-30d9-4d16-ba5c-c1077b45b37e/mini.png)](https://insight.sensiolabs.com/projects/b9916e36-30d9-4d16-ba5c-c1077b45b37e)
 [![Latest Stable Version](https://poser.pugx.org/rfussien/leboncoin-crawler/v/stable.svg)](https://packagist.org/packages/rfussien/leboncoin-crawler)
 [![Latest Unstable Version](https://poser.pugx.org/rfussien/leboncoin-crawler/v/unstable.svg)](https://packagist.org/packages/rfussien/leboncoin-crawler)
 [![License](https://poser.pugx.org/rfussien/leboncoin-crawler/license.svg)](https://packagist.org/packages/rfussien/leboncoin-crawler)
@@ -56,9 +57,9 @@ composer install "rfussien/leboncoin-crawler"
 ### Get the structured data from a search result page
 
 ```php
-Lbc\GetFrom::search('<search_result_url>');
+(new Lbc\GetFrom)->search('<search_result_url>');
 // or with detailed ads
-Lbc\GetFrom::search('<search_result_url>', true);
+(new Lbc\GetFrom)->search('<search_result_url>', true);
 ```
 *example of output*:
 ```json
@@ -107,9 +108,9 @@ Lbc\GetFrom::search('<search_result_url>', true);
 ### Get the structured data from an ad
 
 ```php
-Lbc\GetFrom::ad('<ad_url>');
+(new Lbc\GetFrom)->ad('<ad_url>');
 // or
-Lbc\GetFrom::ad('<ad_id>', '<ad_category>');
+(new Lbc\GetFrom)->ad('<ad_id>', '<ad_category>');
 ```
 
 *example of output*:
