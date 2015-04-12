@@ -14,7 +14,7 @@ class SearchResultUrlParser
      * @param $url
      * @param int $nbPages
      */
-    function __construct($url, $nbPages = 1)
+    public function __construct($url, $nbPages = 1)
     {
         if (!preg_match('/^.*leboncoin.fr/', $url)) {
             $url = preg_replace('/^[\/]?/', $this->baseUrl, $url);
@@ -28,7 +28,7 @@ class SearchResultUrlParser
     {
         // set the default page to 1 unless it is set
         $query = $this->url->getQuery();
-        isset($query['o']) or $query['o'] = 1;
+        isset($query['o']) || $query['o'] = 1;
 
         // remove th (thumb image)
         unset($query['th']);
