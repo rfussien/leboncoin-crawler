@@ -35,15 +35,11 @@ class AdCrawler extends CrawlerAbstract
 
         $pictures = [];
 
-        $node
-            ->filter('#thumbs_carousel > a > span')
-            ->each(function (Crawler $link, $i) use (&$pictures) {
-                $pictures[$i] = preg_replace(
-                    "/.*url\('(.*)'\);/",
-                    '$1',
-                    $link->attr('style')
-                );
-            });
+        foreach ($this->getPictures() as $k => $v) {
+            $v = preg_replace('/images/', 'thumbs', $v);
+
+            $pictures[$k] = $v;
+        }
 
         return $pictures;
     }
@@ -62,12 +58,11 @@ class AdCrawler extends CrawlerAbstract
 
         $pictures = [];
 
-        foreach ($this->getThumbs() as $k => $v) {
-            $k = preg_replace('/thumb/', 'picture', $k);
-            $v = preg_replace('/thumbs/', 'images', $v);
-
-            $pictures[$k] = $v;
-        }
+        $node
+            ->filter('.lbcImages > meta[itemprop="image"]')
+            ->each(function (Crawler $link, $i) use (&$pictures) {
+                $pictures[$i] = $link->attr('content');
+            });
 
         return $pictures;
     }

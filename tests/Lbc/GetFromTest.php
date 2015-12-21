@@ -65,7 +65,7 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
     public function testGetAdData()
     {
         $response = $this->getResponse(
-            dirname(__DIR__) . '/content/ad_753398357.html'
+            dirname(__DIR__) . '/content/ad_897011669.html'
         );
 
         $mock = new Mock();
@@ -76,23 +76,23 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $getFrom->getHttpClient()->getEmitter()->attach($mock);
         $getFrom->getHttpClient()->getEmitter()->attach($mock);
 
-        $dataByUrl = $getFrom->ad('http://www.leboncoin.fr/ventes_immobilieres/745837877.htm');
-        $dataById = $getFrom->ad('745837877', 'ventes_immobilieres');
+        $dataByUrl = $getFrom->ad('http://www.leboncoin.fr/ventes_immobilieres/897011669.htm?ca=3_s');
+        $dataById = $getFrom->ad('897011669', 'ventes_immobilieres');
 
         $this->assertEquals($dataById, $dataByUrl);
-        $this->assertEquals('745837877', $dataById['id']);
+        $this->assertEquals('897011669', $dataById['id']);
         $this->assertEquals('ventes_immobilieres', $dataById['category']);
         $this->assertEquals(3, count($dataById['thumbs']));
         $this->assertEquals(3, count($dataById['pictures']));
-        $this->assertEquals('Maison 130 m² Fontaine Etoupefour', $dataById['title']);
-        $this->assertEquals('14790', $dataById['cp']);
-        $this->assertEquals('Fontaine-Etoupefour', $dataById['city']);
-        $this->assertEquals(240000, $dataById['price']);
-        $this->assertEquals('Maison', $dataById['criterias']['type_de_bien']);
-        $this->assertEquals('5', $dataById['criterias']['pieces']);
-        $this->assertEquals('130 m2', $dataById['criterias']['surface']);
-        $this->assertEquals('Vierge', $dataById['criterias']['ges']);
-        $this->assertEquals('Vierge', $dataById['criterias']['classe_energie']);
+        $this->assertEquals('Appartement F3 de 71m2,Clermont-fd hyper centre', $dataById['title']);
+        $this->assertEquals('63000', $dataById['cp']);
+        $this->assertEquals('Clermont-Ferrand', $dataById['city']);
+        $this->assertEquals(118000, $dataById['price']);
+        $this->assertEquals('Appartement', $dataById['criterias']['type_de_bien']);
+        $this->assertEquals('3', $dataById['criterias']['pieces']);
+        $this->assertEquals('71 m2', $dataById['criterias']['surface']);
+        $this->assertEquals('E (de 36 à 55)', $dataById['criterias']['ges']);
+        $this->assertEquals('D (de 151 à 230)', $dataById['criterias']['classe_energie']);
         $this->assertNotEmpty($dataById['description']);
     }
 
