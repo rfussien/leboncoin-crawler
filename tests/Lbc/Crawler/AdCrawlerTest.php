@@ -12,49 +12,46 @@ class AdCrawlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->url = 'http://www.leboncoin.fr/ventes_immobilieres/745837877.htm';
+        $this->url = 'http://www.leboncoin.fr/ventes_immobilieres/897011669.htm?ca=3_s';
 
-        $this->adcontent = file_get_contents(dirname(dirname(__DIR__)) . '/content/ad_753398357.html');
+        $this->adcontent = file_get_contents(dirname(dirname(__DIR__)) . '/content/ad_897011669.html');
 
         $this->adCrawler = new AdCrawler($this->adcontent);
 
         $this->adInfo = [
             'thumbs'      => [
-                '0' => 'http://193.164.197.50/thumbs/057/0577f71deaf048e04e74827ee8a1af99fc3bf6e0.jpg',
-                '1' => 'http://193.164.196.50/thumbs/ac2/ac21ba0041877475c5887923f0c886f22d7f2f31.jpg',
-                '2' => 'http://193.164.196.30/thumbs/33d/33dcf604ed182701e6b88fea4766a1386caa8a95.jpg',
+                '0' => 'http://img5.leboncoin.fr/thumbs/cd2/cd201a9f3952008e989050029bd22bc092ff0d1b.jpg',
+                '1' => 'http://img2.leboncoin.fr/thumbs/94c/94c768cf258daea91bf3d40c55cf309088c4fd3f.jpg',
+                '2' => 'http://img5.leboncoin.fr/thumbs/e13/e13d7d26816fe5d29d35c998a3905ad4b8e18919.jpg',
             ],
             'pictures'    => [
-                '0' => 'http://193.164.197.50/images/057/0577f71deaf048e04e74827ee8a1af99fc3bf6e0.jpg',
-                '1' => 'http://193.164.196.50/images/ac2/ac21ba0041877475c5887923f0c886f22d7f2f31.jpg',
-                '2' => 'http://193.164.196.30/images/33d/33dcf604ed182701e6b88fea4766a1386caa8a95.jpg',
+                '0' => 'http://img5.leboncoin.fr/images/cd2/cd201a9f3952008e989050029bd22bc092ff0d1b.jpg',
+                '1' => 'http://img2.leboncoin.fr/images/94c/94c768cf258daea91bf3d40c55cf309088c4fd3f.jpg',
+                '2' => 'http://img5.leboncoin.fr/images/e13/e13d7d26816fe5d29d35c998a3905ad4b8e18919.jpg',
             ],
-            'title'       => 'Maison 130 m² Fontaine Etoupefour',
-            'price'       => 240000,
-            'city'        => 'Fontaine-Etoupefour',
-            'cp'          => '14790',
+            'title'       => 'Appartement F3 de 71m2,Clermont-fd hyper centre',
+            'price'       => 118000,
+            'city'        => 'Clermont-Ferrand',
+            'cp'          => '63000',
             'criterias'   => [
-                'type_de_bien'   => 'Maison',
-                'pieces'         => '5',
-                'surface'        => '130 m2',
-                'ges'            => 'Vierge',
-                'classe_energie' => 'Vierge',
+                'type_de_bien'   => 'Appartement',
+                'pieces'         => '3',
+                'surface'        => '71 m2',
+                'ges'            => 'E (de 36 à 55)',
+                'classe_energie' => 'D (de 151 à 230)',
             ],
             'description' =>
-                "AGENCES S'ABSTENIR IMPÉRATIVEMENT . MERCI de respecter\n" .
-                "Maison 130 m² environ, Fontaine Etoupefour.\n" .
-                "RDC: cuisine ouverte sur salle-salon avec surface totale de " .
-                "50 m² ; le tout en parquet chêne massif. Deux Chambres (13 " .
-                "m² et 11.5 m²), SDB 8 m² avec douche et baignoire. WC séparés " .
-                "Une pièce buanderie 9 m² (placard portes coulissantes)\n" .
-                "ETAGE: Deux chambres de 13 m² chacune sous toiture, petite " .
-                "salle d'eau lavabo et wc. Grenier à aménager de 35 m². " .
-                "Chauffage gaz, chaudière à condensation de 2008 + conduit de " .
-                "cheminée existant non utilisé (possible installation de " .
-                "cheminée ou poil à bois)\n" .
-                "Portail alu motorisé Jardin arboré de 780 m² environ avec " .
-                "un abris de jardin, entouré de haies sans aucun vis-à-vis " .
-                "avec 2 terrasses en bois à l'avant et à l'arrière de la maison."
+                "Quartier galaxie,rue fontgiève à 5 minutes à pied ".
+				"du centre-ville, proche de toutes ".
+				"commodités,bus,supermarche,école,la banque,la ".
+				"poste...\nParticulier à vendre appartement F3 de 71 m2 très ".
+				"lumineux,sejour double exposition(sud ".
+				"ouest),cuisine equipée,2 chambres,Salle de bain, ".
+				"WC séparé et de nombreux rangement.Fenêtres double ".
+				"vitrage,volets roulants électrique,très bon etat ".
+				"general,1 place de parking couverte et sécurisée ".
+				"en rez de chaussée,en face de la gardienne.\nPRIX: 118000 Euros\nTEL:    0671014891 Email: clermaison@yahoo.fr"
+									
         ];
     }
 
