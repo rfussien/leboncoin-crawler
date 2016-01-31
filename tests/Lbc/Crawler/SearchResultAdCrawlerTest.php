@@ -10,9 +10,9 @@ class SearchResultAdCrawlerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         /**
-         * http://www.leboncoin.fr/voitures/753398357.htm?ca=4_s
+         * http://www.leboncoin.fr/voitures/917789397.htm?ca=4_s
          */
-        $this->adContent = file_get_contents(dirname(dirname(__DIR__)) . '/content/search_result_ad.html');
+        $this->adContent = file_get_contents(dirname(dirname(__DIR__)) . '/content/search_result.html');
     }
 
     public function testTheInformationOfAnAdAreCorrectlyExtracted()
@@ -22,15 +22,15 @@ class SearchResultAdCrawlerTest extends \PHPUnit_Framework_TestCase
         $search = new SearchResultAdCrawler($node);
 
         $expected = (object)[
-            'id'         => '753398357',
-            'title'      => 'Volkswagen TOUAREG RLINE 245ch V6',
-            'price'      => 49990,
-            'url'        => 'http://www.leboncoin.fr/voitures/753398357.htm?ca=4_s',
-            'created_at' => SearchResultDateTimeParser::toDt('5 jan', '19:58'),
-            'thumb'      => 'http://193.164.197.60/thumbs/0a3/0a3d6148ed12dfa159bd124810f3bfd612d23e5f.jpg',
+            'id'         => '896305873',
+            'title'      => 'Mercedes Classe B II 180 Design Automatique Diesel',
+            'price'      => 20500,
+            'url'        => 'http://www.leboncoin.fr/voitures/896305873.htm?ca=4_s',
+            'created_at' => SearchResultDateTimeParser::toDt("Aujourd'hui", '20:01'),
+            'thumb'      => 'http://img3.leboncoin.fr/thumbs/67d/67db00ee1186b81bd3177f0d9b92fe8d012f1778.jpg',
             'nb_image'   => 3,
-            'placement'  => 'Colleville-Montgomery / Calvados',
-            'type'       => 'pro',
+            'placement'  => 'Pont-l\'Evêque / Calvados',
+            'type'       => 'part',
         ];
 
         $this->assertEquals($expected, $search->getAll());

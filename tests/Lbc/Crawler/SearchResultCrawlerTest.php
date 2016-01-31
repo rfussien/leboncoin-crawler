@@ -7,8 +7,6 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
     protected $searchContent;
     protected $searchContent2;
 
-    protected $adContent;
-
     public function setUp()
     {
         /*
@@ -20,11 +18,6 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
          * http://www.leboncoin.fr/telephonie/offres/basse_normandie/?f=a&th=1&q=iphone
          */
         $this->searchContent2 = file_get_contents(dirname(dirname(__DIR__)) . '/content/search_result2.html');
-
-        /**
-         * http://www.leboncoin.fr/voitures/753398357.htm?ca=4_s
-         */
-        $this->adContent = file_get_contents(dirname(dirname(__DIR__)) . '/content/search_result_ad.html');
     }
 
     public function testIVeGotSomeOfflineContent()
@@ -45,13 +38,13 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
     {
         $search = new SearchResultCrawler($this->searchContent);
 
-        $this->assertEquals(650, $search->getNbAds());
-        $this->assertEquals(19, $search->getNbPages());
+        $this->assertEquals(690, $search->getNbAds());
+        $this->assertEquals(20, $search->getNbPages());
 
         $search = new SearchResultCrawler($this->searchContent2);
 
-        $this->assertEquals(1801, $search->getNbAds());
-        $this->assertEquals(52, $search->getNbPages());
+        $this->assertEquals(1965, $search->getNbAds());
+        $this->assertEquals(57, $search->getNbPages());
     }
 
     public function testTheAdsId()
@@ -59,13 +52,13 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
         $search = new SearchResultCrawler($this->searchContent);
 
         $expected = [
-            '753862363', '753850295', '753843597', '753832063', '753825535',
-            '753824979', '729205464', '742650820', '750621938', '690318904',
-            '753766957', '753764441', '742651186', '753759783', '748237410',
-            '729132192', '753726642', '753723041', '702115601', '733979787',
-            '728015610', '746360177', '744534260', '691276807', '753354997',
-            '691269084', '712484305', '662053785', '710735683', '750941004',
-            '746609897', '746990846', '753621234', '753606675', '746080950'
+            '896305873', '918388326', '918353717', '891325771', '918340050',
+            '918339265', '918335090', '914545627', '918236863', '899214543',
+            '918145675', '917182471', '918130073', '902341065', '911107968',
+            '918099489', '918099192', '918057958', '918055703', '918041045',
+            '918035420', '918115788', '918015740', '869266253', '917977535',
+            '917967176', '879087195', '917921773', '917920350', '898591934',
+            '917934779', '917937286', '917869520', '917934759', '917789397',
         ];
 
         $this->assertEquals($expected, $search->getAdsId());

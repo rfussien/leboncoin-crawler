@@ -1,6 +1,7 @@
 <?php namespace Lbc\Crawler;
 
 use Lbc\Helper\Encoding;
+use League\Url\Url;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdCrawler extends CrawlerAbstract
@@ -35,11 +36,13 @@ class AdCrawler extends CrawlerAbstract
 
         $pictures = [];
 
-        foreach ($this->getPictures() as $k => $v) {
-            $v = preg_replace('/images/', 'thumbs', $v);
-
-            $pictures[$k] = $v;
-        }
+        $node
+            ->filter('.lbcImages > meta[itemprop="image"]')
+            ->each(function (Crawler $link, $i) use (&$pictures) {
+                $pictures[$i] = Url::createFromUrl($link->attr('content'))
+                    ->setScheme('http')
+                    ->__toString();
+            });
 
         return $pictures;
     }
@@ -58,11 +61,11 @@ class AdCrawler extends CrawlerAbstract
 
         $pictures = [];
 
-        $node
-            ->filter('.lbcImages > meta[itemprop="image"]')
-            ->each(function (Crawler $link, $i) use (&$pictures) {
-                $pictures[$i] = $link->attr('content');
-            });
+        foreach ($this->getThumbs() as $k => $v) {
+            $v = preg_replace('/thumbs/', 'images', $v);
+
+            $pictures[$k] = $v;
+        }
 
         return $pictures;
     }
@@ -105,10 +108,12 @@ class AdCrawler extends CrawlerAbstract
             $node = $this->crawler;
         }
 
+
         $description = $node->filter('.AdviewContent > .content')->html();
         $description = str_replace("\n", ' ', $description);
         $description = str_replace('<br><br>', "\n", $description);
         $description = str_replace('<br>', ' ', $description);
+        $description = preg_replace('/ +/', ' ', $description);
 
         return trim($description);
     }

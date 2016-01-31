@@ -1,6 +1,7 @@
 <?php namespace Lbc\Crawler;
 
 use Lbc\Parser\SearchResultDateTimeParser;
+use League\Url\Url;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -87,7 +88,9 @@ class SearchResultAdCrawler
      */
     public function getUrl()
     {
-        return $this->url;
+        return Url::createFromUrl($this->url)
+            ->setScheme('http')
+            ->__toString();
     }
 
     /**
@@ -116,7 +119,9 @@ class SearchResultAdCrawler
         $node = $this->node->filter('.image-and-nb > img');
 
         return $this->getFieldValue($node, null, function ($value) {
-            return $value;
+            return Url::createFromUrl($value)
+                ->setScheme('http')
+                ->__toString();
         }, 'attr', 'src');
     }
 
