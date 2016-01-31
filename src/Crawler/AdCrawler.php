@@ -62,7 +62,8 @@ class AdCrawler extends CrawlerAbstract
         $node
             ->filter('.lbcImages > meta[itemprop="image"]')
             ->each(function (Crawler $link, $i) use (&$pictures) {
-                $pictures[$i] = UrlNormalizer::testUrlProtocol($link->attr('content'));
+                $link = preg_replace('/thumbs/', 'images', $link->attr('content'));
+                $pictures[$i] = UrlNormalizer::testUrlProtocol($link);
             });
 
         return $pictures;
