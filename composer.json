@@ -1,6 +1,8 @@
 {
     "name": "rfussien/leboncoin-crawler",
+    "type": "library",
     "description": "Makes easy the data extraction from leboncoin.fr",
+    "homepage": "https://github.com/rfussien/leboncoin-crawler",
     "license": "MIT",
     "authors": [{
         "name": "Remi FUSSIEN",
@@ -8,19 +10,23 @@
     }],
     "require": {
         "php": ">=5.4",
-        "guzzlehttp/guzzle": "~5.1",
+        "guzzlehttp/guzzle": "~5",
         "league/url": "~3.2",
         "nesbot/carbon": "~1.13",
-        "symfony/css-selector": "~2.5",
-        "symfony/dom-crawler": "~2.5"
+        "symfony/css-selector": "~3",
+        "symfony/dom-crawler": "~3"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4"
+        "phpunit/phpunit": "~5",
+        "scrutinizer/ocular": "~1.1",
+        "squizlabs/php_codesniffer": "~2.3"
     },
     "autoload": {
         "psr-4": {
             "Lbc\\": "src"
         }
     },
-    "minimum-stability": "stable"
+    "scripts": {
+        "test": "phpunit"
+    }
 }
