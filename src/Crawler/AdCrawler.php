@@ -84,11 +84,11 @@ class AdCrawler extends CrawlerAbstract
 
         list($info['price'], $info['city'], $info['cp']) = $node
             ->filter('.lbcParams')->first()->filter('td')
-            ->each(function(Crawler $param) {
+            ->each(function (Crawler $param) {
                 return $param->text();
             });
 
-        $info['price'] = (int) preg_replace('/[^\d]/', '', $info['price']);
+        $info['price'] = (int)preg_replace('/[^\d]/', '', $info['price']);
 
         return $info;
     }
