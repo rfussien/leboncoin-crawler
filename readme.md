@@ -41,13 +41,13 @@ an api, who knows...).
 
 ## Requirements
 
-- PHP 5.4+ should do
+- PHP 5.6 | 7, HHVM (PHP 5.4 and 5.5 may work)
 - [optional] PHPUnit to execute the test suite
 
-## Installation
+## Install
 
 ```bash
-composer install "rfussien/leboncoin-crawler"
+$ composer require rfussien/leboncoin-crawler
 ```
 
 ## Usage
@@ -144,3 +144,22 @@ composer install "rfussien/leboncoin-crawler"
 ```
 
 There are a bunch of features if you digg a bit in the sources.
+
+
+## Testing
+
+``` bash
+$ composer test
+```
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
+
+## Security
+
+If you discover any security related issues, please email :author_email instead of using the issue tracker.
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
