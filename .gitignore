@@ -1,5 +1,6 @@
-/vendor
-/node_modules
-composer.phar
+build
 composer.lock
+docs
+node_modules
 npm-debug.log
+vendor
