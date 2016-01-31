@@ -11,7 +11,7 @@ class UrlNormalizer
      */
     public static function testUrlProtocol($url)
     {
-        if (substr($url, 0, 3) != 'http') {
+        if (substr($url, 0, 4) != "http") {
             $url = "http:" . $url;
         }
 
