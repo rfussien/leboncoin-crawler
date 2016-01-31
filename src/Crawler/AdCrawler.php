@@ -1,6 +1,7 @@
 <?php namespace Lbc\Crawler;
 
 use Lbc\Helper\Encoding;
+use Lbc\Helper\UrlNormalizer;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdCrawler extends CrawlerAbstract
@@ -61,7 +62,7 @@ class AdCrawler extends CrawlerAbstract
         $node
             ->filter('.lbcImages > meta[itemprop="image"]')
             ->each(function (Crawler $link, $i) use (&$pictures) {
-                $pictures[$i] = $link->attr('content');
+                $pictures[$i] = UrlNormalizer::testUrlProtocol($link->attr('content'));
             });
 
         return $pictures;

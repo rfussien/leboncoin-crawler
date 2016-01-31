@@ -1,5 +1,6 @@
 <?php namespace Lbc\Crawler;
 
+use Lbc\Helper\UrlNormalizer;
 use Lbc\Parser\SearchResultDateTimeParser;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -39,7 +40,7 @@ class SearchResultAdCrawler
     public function __construct(Crawler $node)
     {
         $this->node = $node;
-        $this->url = $node->attr('href');
+        $this->url = UrlNormalizer::testUrlProtocol($node->attr('href'));
     }
 
     /**
@@ -115,9 +116,11 @@ class SearchResultAdCrawler
     {
         $node = $this->node->filter('.image-and-nb > img');
 
-        return $this->getFieldValue($node, null, function ($value) {
+        $thumb = $this->getFieldValue($node, null, function ($value) {
             return $value;
         }, 'attr', 'src');
+
+        return UrlNormalizer::testUrlProtocol($thumb);
     }
 
     /**
