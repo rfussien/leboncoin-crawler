@@ -1,6 +1,5 @@
 <?php namespace Lbc\Crawler;
 
-use Lbc\Parser\SearchResultDateTimeParser;
 use Symfony\Component\DomCrawler\Crawler;
 
 class SearchResultAdCrawlerTest extends \PHPUnit_Framework_TestCase
@@ -17,20 +16,20 @@ class SearchResultAdCrawlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTheInformationOfAnAdAreCorrectlyExtracted()
     {
-        $node = (new Crawler($this->adContent))->filter('.list-lbc > a')->first();
+        $node = (new Crawler($this->adContent))->filter('[itemtype="http://schema.org/Offer"] > a')->first();
 
         $search = new SearchResultAdCrawler($node);
 
-        $expected = (object)[
-            'id'         => '896305873',
-            'title'      => 'Mercedes Classe B II 180 Design Automatique Diesel',
-            'price'      => 20500,
-            'url'        => 'http://www.leboncoin.fr/voitures/896305873.htm?ca=4_s',
-            'created_at' => SearchResultDateTimeParser::toDt("Aujourd'hui", '20:01'),
-            'thumb'      => 'http://img3.leboncoin.fr/thumbs/67d/67db00ee1186b81bd3177f0d9b92fe8d012f1778.jpg',
-            'nb_image'   => 3,
-            'placement'  => 'Pont-l\'Evêque / Calvados',
-            'type'       => 'part',
+        $expected = (object) [
+            'id' => '1046613551',
+            'title' => 'BMW 635d coupe',
+            'price' => 33499,
+            'url' => 'http://www.leboncoin.fr/voitures/1046613551.htm?ca=4_s',
+            'created_at' => '2016-11-07 00:11',
+            'thumb' => 'http://img2.leboncoin.fr/ad-thumb/cd38e9ebe6abc86e2568de2a4ab14e8fa9f5196f.jpg',
+            'nb_image' => 3,
+            'placement' => 'Manche',
+            'type' => 'part',
         ];
 
         $this->assertEquals($expected, $search->getAll());

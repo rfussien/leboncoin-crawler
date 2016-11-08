@@ -1,6 +1,5 @@
 <?php namespace Lbc\Crawler;
 
-use Lbc\Parser\SearchResultDateTimeParser;
 use League\Url\Url;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -74,7 +73,7 @@ class SearchResultAdCrawler
      */
     public function getPrice()
     {
-        $node = $this->node->filter('.price');
+        $node = $this->node->filter('*[itemprop=price]');
 
         return $this->getFieldValue($node, 0, function ($value) {
             return (int) preg_replace('/[^\d]/', '', trim($value));
@@ -96,17 +95,17 @@ class SearchResultAdCrawler
     /**
      * Return the data and time the ad was created
      *
-     * @return \Carbon\Carbon
+     * @return string
      */
     public function getCreatedAt()
     {
-        list($date, $time) = $this->node
-            ->filter('.date > div')
-            ->each(function (Crawler $node) {
-                return $node->text();
-            });
+        $date = $this->node
+            ->filter('*[itemprop=availabilityStarts]')
+            ->first()
+            ->attr('content')
+        ;
 
-        return SearchResultDateTimeParser::toDt($date, $time);
+        return (new \DateTime($date))->format('Y-m-d H:m');
     }
 
     /**
@@ -116,13 +115,16 @@ class SearchResultAdCrawler
      */
     public function getThumb()
     {
-        $node = $this->node->filter('.image-and-nb > img');
+        $src = $this->node
+            ->filter('.item_imagePic .lazyload[data-imgsrc]')
+            ->first()
+            ->attr('data-imgsrc')
+        ;
 
-        return $this->getFieldValue($node, null, function ($value) {
-            return Url::createFromUrl($value)
+        return Url::createFromUrl($src)
                 ->setScheme('http')
-                ->__toString();
-        }, 'attr', 'src');
+                ->__toString()
+        ;
     }
 
     /**
@@ -132,7 +134,7 @@ class SearchResultAdCrawler
      */
     public function getNbImage()
     {
-        $node = $this->node->filter('.image-and-nb > .nb > .value');
+        $node = $this->node->filter('.item_imageNumber');
 
         return $this->getFieldValue($node, 0, function ($value) {
             return (int)trim($value);
@@ -144,7 +146,7 @@ class SearchResultAdCrawler
      */
     public function getPlacement()
     {
-        $node = $this->node->filter('.placement');
+        $node = $this->node->filter('*[itemprop=availableAtOrFrom]');
 
         return $this->getFieldValue($node, '', function ($value) {
             return preg_replace('/\s+/', ' ', trim($value));
@@ -157,7 +159,7 @@ class SearchResultAdCrawler
      */
     public function getType()
     {
-        $node = $this->node->filter('.detail > .category');
+        $node = $this->node->filter('*[itemprop=category]');
 
         return $this->getFieldValue($node, false, function ($value) {
             if ('pro' == preg_replace('/[\s()]+/', '', $value)) {
@@ -170,16 +172,16 @@ class SearchResultAdCrawler
 
     public function getAll()
     {
-        return (object)[
-            'id'         => $this->getId(),
-            'title'      => $this->getTitle(),
-            'price'      => $this->getPrice(),
-            'url'        => $this->getUrl(),
+        return (object) [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'price' => $this->getPrice(),
+            'url' => $this->getUrl(),
             'created_at' => $this->getCreatedAt(),
-            'thumb'      => $this->getThumb(),
-            'nb_image'   => $this->getNbImage(),
-            'placement'  => $this->getPlacement(),
-            'type'       => $this->getType(),
+            'thumb' => $this->getThumb(),
+            'nb_image' => $this->getNbImage(),
+            'placement' => $this->getPlacement(),
+            'type' => $this->getType(),
         ];
     }
 

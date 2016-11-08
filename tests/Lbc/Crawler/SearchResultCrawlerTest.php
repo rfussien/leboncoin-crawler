@@ -38,13 +38,13 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
     {
         $search = new SearchResultCrawler($this->searchContent);
 
-        $this->assertEquals(690, $search->getNbAds());
-        $this->assertEquals(20, $search->getNbPages());
+        $this->assertEquals(799, $search->getNbAds());
+        $this->assertEquals(23, $search->getNbPages());
 
         $search = new SearchResultCrawler($this->searchContent2);
 
-        $this->assertEquals(1965, $search->getNbAds());
-        $this->assertEquals(57, $search->getNbPages());
+        $this->assertEquals(5047, $search->getNbAds());
+        $this->assertEquals(145, $search->getNbPages());
     }
 
     public function testTheAdsId()
@@ -52,13 +52,13 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
         $search = new SearchResultCrawler($this->searchContent);
 
         $expected = [
-            '896305873', '918388326', '918353717', '891325771', '918340050',
-            '918339265', '918335090', '914545627', '918236863', '899214543',
-            '918145675', '917182471', '918130073', '902341065', '911107968',
-            '918099489', '918099192', '918057958', '918055703', '918041045',
-            '918035420', '918115788', '918015740', '869266253', '917977535',
-            '917967176', '879087195', '917921773', '917920350', '898591934',
-            '917934779', '917937286', '917869520', '917934759', '917789397',
+            '1046613551', '1046609163', '1046583800', '1046572010', '1028952521',
+            '1046447258', '1046411771', '1016363207', '1035200374', '1046352820',
+            '1031298162', '1030691674', '1046321177', '1032248300', '1000713898',
+            '1046288334', '1018108325', '1025795963', '1046233711', '1015545496',
+            '1046218853', '1042802333', '1040954432', '1046387866', '996082887',
+            '1035218075', '1033979644', '1046158278', '1046156273', '1046149609',
+            '1046101160', '1046048811', '1046069122', '1046059631', '1046002930',
         ];
 
         $this->assertEquals($expected, $search->getAdsId());

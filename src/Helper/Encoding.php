@@ -24,7 +24,6 @@ class Encoding
                 return $chr;
             }
             return '';
-
         }, str_split($string));
 
         return implode($ret);

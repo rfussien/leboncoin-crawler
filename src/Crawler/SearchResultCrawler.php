@@ -10,7 +10,7 @@ class SearchResultCrawler extends CrawlerAbstract
     public function getNbAds()
     {
         $nbAds = $this->crawler
-            ->filter('nav > ul.navlist.type > li.selected > span.value > b')
+            ->filter('a.tabsSwitch span.tabsSwitchNumbers')
             ->first();
 
         if ($nbAds->count()) {
@@ -40,7 +40,7 @@ class SearchResultCrawler extends CrawlerAbstract
     {
         $ads = array();
 
-        $this->crawler->filter('div.list-lbc > a')
+        $this->crawler->filter('[itemtype="http://schema.org/Offer"] > a')
             ->each(function ($node) use (&$ads) {
                 $ad = (new SearchResultAdCrawler($node))->getAll();
                 $ads [$ad->id] = $ad;
@@ -58,7 +58,7 @@ class SearchResultCrawler extends CrawlerAbstract
     {
         $adsID = array();
 
-        $this->crawler->filter('div.list-lbc > a')
+        $this->crawler->filter('[itemtype="http://schema.org/Offer"] > a')
             ->each(function ($node) use (&$adsID) {
                 $adsID [] = (new SearchResultAdCrawler($node))->getId();
             });

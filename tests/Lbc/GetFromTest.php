@@ -3,7 +3,6 @@
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Subscriber\Mock;
-use Lbc\Parser\SearchResultDateTimeParser;
 
 class GetFromTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,8 +22,8 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $data = $getFrom->search($url);
 
         $this->assertEquals(1, $data['page']);
-        $this->assertEquals(690, $data['total_ads']);
-        $this->assertEquals(20, $data['total_page']);
+        $this->assertEquals(799, $data['total_ads']);
+        $this->assertEquals(23, $data['total_page']);
         $this->assertEquals('voitures', $data['category']);
         $this->assertEquals('basse_normandie', $data['search_area']);
         $this->assertEquals('date', $data['sort_by']);
@@ -47,16 +46,16 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $url = 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=70000&fu=2&gb=2';
         $data = $getFrom->search($url, true);
 
-        $expected = (object)[
-            'id'         => '917789397',
-            'title'      => 'Volvo xc90 r design',
-            'price'      => 30000,
-            'url'        => 'http://www.leboncoin.fr/voitures/917789397.htm?ca=4_s',
-            'created_at' => SearchResultDateTimeParser::toDt("Hier", "18:01"),
-            'thumb'      => 'http://img6.leboncoin.fr/thumbs/907/90783d4040062193c703d48e4929f95c15bf1233.jpg',
-            'nb_image'   => 3,
-            'placement'  => 'Saint-Hilaire-du-Harcouët / Manche',
-            'type'       => 'part',
+        $expected = (object) [
+            'id' => '1046002930',
+            'title' => 'Golf 7 vii carat 105 cv dsg',
+            'price' => 15490,
+            'url' => 'http://www.leboncoin.fr/voitures/1046002930.htm?ca=4_s',
+            'created_at' => '2016-11-06 00:11',
+            'thumb' => 'http://img5.leboncoin.fr/ad-thumb/e57c3f460fc5f6581e72fbac70c196ca660627fb.jpg',
+            'nb_image' => 3,
+            'placement' => 'Caen / Calvados',
+            'type' => 'part',
         ];
 
         $this->assertEquals($expected, array_pop($data['ads']));

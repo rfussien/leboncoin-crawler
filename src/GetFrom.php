@@ -31,6 +31,7 @@ class GetFrom
      *
      * @param $url
      * @param bool $detailedAd
+     *
      * @return array
      */
     public function search($url, $detailedAd = false)
@@ -61,6 +62,7 @@ class GetFrom
      * Retrieve the ad's data from an ad's ID and its category
      *
      * @param $url
+     *
      * @return array
      */
     private function adById($id, $category)
