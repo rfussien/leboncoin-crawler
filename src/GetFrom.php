@@ -31,6 +31,7 @@ class GetFrom
      *
      * @param $url
      * @param bool $detailedAd
+     *
      * @return array
      */
     public function search($url, $detailedAd = false)
@@ -44,14 +45,14 @@ class GetFrom
         $ads = ($detailedAd) ? $searchData->getAds() : $searchData->getAdsId();
 
         $sumarize = [
-            'total_ads'   => $searchData->getNbAds(),
-            'total_page'  => $searchData->getNbPages(),
-            'category'    => $url->getCategory(),
-            'location'    => $url->getLocation(),
+            'total_ads' => $searchData->getNbAds(),
+            'total_page' => $searchData->getNbPages(),
+            'category' => $url->getCategory(),
+            'location' => $url->getLocation(),
             'search_area' => $url->getSearchArea(),
-            'sort_by'     => $url->getSortType(),
-            'type'        => $url->getType(),
-            'ads'         => $ads,
+            'sort_by' => $url->getSortType(),
+            'type' => $url->getType(),
+            'ads' => $ads,
         ];
 
         return array_merge($url->getNav(), $sumarize);
@@ -61,6 +62,7 @@ class GetFrom
      * Retrieve the ad's data from an ad's ID and its category
      *
      * @param $url
+     *
      * @return array
      */
     private function adById($id, $category)
