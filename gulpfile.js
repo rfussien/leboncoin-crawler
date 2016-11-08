@@ -11,7 +11,7 @@ gulp.task('phpunit', function () {
         clear: true,
         notify: true
     };
-    gulp.src('phpunit.xml')
+    gulp.src('phpunit.xml.dist')
         .pipe(phpunit('', options))
         .on('error', notify.onError({
             title: "Failed Tests!",
