@@ -45,14 +45,14 @@ class GetFrom
         $ads = ($detailedAd) ? $searchData->getAds() : $searchData->getAdsId();
 
         $sumarize = [
-            'total_ads' => $searchData->getNbAds(),
-            'total_page' => $searchData->getNbPages(),
-            'category' => $url->getCategory(),
-            'location' => $url->getLocation(),
+            'total_ads'   => $searchData->getNbAds(),
+            'total_page'  => $searchData->getNbPages(),
+            'category'    => $url->getCategory(),
+            'location'    => $url->getLocation(),
             'search_area' => $url->getSearchArea(),
-            'sort_by' => $url->getSortType(),
-            'type' => $url->getType(),
-            'ads' => $ads,
+            'sort_by'     => $url->getSortType(),
+            'type'        => $url->getType(),
+            'ads'         => $ads,
         ];
 
         return array_merge($url->getNav(), $sumarize);
