@@ -115,9 +115,15 @@ class SearchResultAdCrawler
      */
     public function getThumb()
     {
-        $src = $this->node
+        $image = $this->node
             ->filter('.item_imagePic .lazyload[data-imgsrc]')
-            ->first()
+            ->first();
+
+        if (0 === $image->count()) {
+            return;
+        }
+
+        $src = $image
             ->attr('data-imgsrc')
         ;
 
