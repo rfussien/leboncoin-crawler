@@ -24,6 +24,7 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $data['page']);
         $this->assertEquals(799, $data['total_ads']);
         $this->assertEquals(23, $data['total_page']);
+        $this->assertEquals(35, $data['ads_per_page']);
         $this->assertEquals('voitures', $data['category']);
         $this->assertEquals('basse_normandie', $data['search_area']);
         $this->assertEquals('date', $data['sort_by']);

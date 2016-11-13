@@ -47,6 +47,7 @@ class GetFrom
         $sumarize = [
             'total_ads'   => $searchData->getNbAds(),
             'total_page'  => $searchData->getNbPages(),
+            'ads_per_page'  => $searchData->getNbAdsPerPage(),
             'category'    => $url->getCategory(),
             'location'    => $url->getLocation(),
             'search_area' => $url->getSearchArea(),
