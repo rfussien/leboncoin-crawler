@@ -22,13 +22,27 @@ class SearchResultCrawler extends CrawlerAbstract
     }
 
     /**
+     * Return the number of ads per page.
+     *
+     * Could be dynamically guessed in future, if Leboncoin change it frequently
+     * Or if they add the ability for user to change it on result pages.
+     *
+     *
+     * @return int
+     */
+    public function getNbAdsPerPage()
+    {
+        return 35;
+    }
+
+    /**
      * Return the number of page
      *
      * @return int
      */
     public function getNbPages()
     {
-        return (int) ceil($this->getNbAds() / 35);
+        return (int) ceil($this->getNbAds() / $this->getNbAdsPerPage());
     }
 
     /**
