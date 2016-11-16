@@ -18,7 +18,7 @@
 require_once '../vendor/autoload.php';
 
 $leboncoin_name = 'Locations Paris 17e';
-$leboncoin_result_url = 'http://www.leboncoin.fr/locations/offres/ile_de_france/?f=a&th=1&mre=1000&sqs=5&ros=2&ret=2&location=Paris%2075017';
+$leboncoin_result_url = 'https://www.leboncoin.fr/locations/offres/ile_de_france/?th=1&location=Paris%2075017&parrot=0&sqs=5&ros=2&ret=2';
 
 $mailer = (object) [
     'smtp_host' => 'smtp.gmail.com',
