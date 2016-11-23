@@ -99,13 +99,20 @@ class SearchResultAdCrawler
      */
     public function getCreatedAt()
     {
-        $date = $this->node
+        $node = $this->node
             ->filter('*[itemprop=availabilityStarts]')
             ->first()
-            ->attr('content')
         ;
 
-        return (new \DateTime($date))->format('Y-m-d H:m');
+        $date = $node->attr('content');
+
+        $time = $this->getFieldValue($node, 0, function ($value) {
+            $value = trim($value);
+
+            return substr($value, strpos($value, ',') + 2);
+        });
+
+        return $date.' '.$time;
     }
 
     /**
@@ -160,7 +167,6 @@ class SearchResultAdCrawler
     }
 
     /**
-     *
      * @return mixed
      */
     public function getType()
