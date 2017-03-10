@@ -2,7 +2,8 @@
 
 namespace Lbc\Crawler;
 
-use League\Url\Url;
+use League\Uri\Components\Scheme;
+use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -89,9 +90,7 @@ class SearchResultAdCrawler
      */
     public function getUrl()
     {
-        return Url::createFromUrl($this->url)
-            ->setScheme('http')
-            ->__toString();
+        return (string)Http::createFromString($this->url)->withScheme('http');
     }
 
     /**
@@ -136,10 +135,7 @@ class SearchResultAdCrawler
             ->attr('data-imgsrc')
         ;
 
-        return Url::createFromUrl($src)
-                ->setScheme('http')
-                ->__toString()
-        ;
+        return (string)Http::createFromString($src)->withScheme('http');
     }
 
     /**

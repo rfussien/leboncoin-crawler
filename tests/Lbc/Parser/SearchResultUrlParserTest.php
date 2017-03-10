@@ -1,4 +1,6 @@
-<?php namespace Lbc\Parser;
+<?php
+
+namespace Lbc\Parser;
 
 class SearchResultUrlParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,27 +18,27 @@ class SearchResultUrlParserTest extends \PHPUnit_Framework_TestCase
     {
         $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/?th=1');
 
-        $this->assertEmpty($urlParser->current()->getQuery()['th']);
+        $this->assertEmpty($urlParser->current()->query->getValue('th'));
     }
 
     public function testItHasADefaultPage() {
         $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/');
 
-        $this->assertNotEmpty($urlParser->current()->getQuery()['o']);
+        $this->assertNotEmpty($urlParser->current()->query->getValue('o'));
     }
 
     public function testItHasAPreviousPage()
     {
         $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/?o=3', 6);
 
-        $this->assertEquals(2, $urlParser->previous()->getQuery()['o']);
+        $this->assertEquals(2, $urlParser->previous()->query->getValue('o'));
     }
 
     public function testItHasANextPage()
     {
         $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/?o=3', 6);
 
-        $this->assertEquals(4, $urlParser->next()->getQuery()['o']);
+        $this->assertEquals(4, $urlParser->next()->query->getValue('o'));
     }
 
     public function testThereIsNoPreviousPageBeforeTheFirstOne()

@@ -2,7 +2,9 @@
 
 namespace Lbc\Parser;
 
-use League\Url\Url;
+use League\Uri\Components\Query;
+use League\Uri\Modifiers\RemoveQueryKeys;
+use League\Uri\Schemes\Http;
 
 class AdUrlParser
 {
@@ -15,15 +17,9 @@ class AdUrlParser
 
     public function __construct($url)
     {
-        $this->url = Url::createFromUrl($url);
+        $this->url = Http::createFromString($url);
 
-        /**
-         * Clean the URL by removing every params (no need)
-         */
-        $query = $this->url->getQuery();
-        foreach ($query->keys() as $paramName) {
-            unset($query[$paramName]);
-        }
+        $this->url = (new RemoveQueryKeys($this->url->query->keys()))->__invoke($this->url);
 
         preg_match(
             '/\/(.*)\/(.*)\.htm/',

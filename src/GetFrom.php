@@ -12,9 +12,9 @@ class GetFrom
 {
     protected $httpClient;
 
-    public function __construct()
+    public function __construct(Client $client = null)
     {
-        $this->httpClient = new Client();
+        $this->httpClient = $client ?: new Client();
     }
 
     /**

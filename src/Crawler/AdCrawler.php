@@ -3,7 +3,7 @@
 namespace Lbc\Crawler;
 
 use Lbc\Helper\Encoding;
-use League\Url\Url;
+use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdCrawler extends CrawlerAbstract
@@ -41,9 +41,7 @@ class AdCrawler extends CrawlerAbstract
         $node
             ->filter('.lbcImages > meta[itemprop="image"]')
             ->each(function (Crawler $link, $i) use (&$pictures) {
-                $pictures[$i] = Url::createFromUrl($link->attr('content'))
-                    ->setScheme('http')
-                    ->__toString();
+                $pictures[$i] = (string)Http::createFromString($link->attr('content'))->withScheme('http');
             });
 
         return $pictures;
@@ -56,7 +54,7 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getPictures()
     {
-       return array_map(function ($picture) {
+        return array_map(function ($picture) {
             return str_replace('thumbs', 'images', $picture);
         }, $this->getThumbs());
     }
@@ -100,7 +98,6 @@ class AdCrawler extends CrawlerAbstract
         if (!($node instanceof Crawler)) {
             $node = $this->crawler;
         }
-
 
         $description = $node->filter('.AdviewContent > .content')->html();
         $description = str_replace(["\n", '<br><br>', '<br>'], [' ', "\n", ' '], $description);

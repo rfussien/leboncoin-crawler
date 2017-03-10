@@ -2,10 +2,16 @@
 
 namespace Lbc\Parser;
 
-use League\Url\UrlImmutable as Url;
+use League\Uri\Modifiers\MergeQuery;
+use League\Uri\Modifiers\RemoveQueryKeys;
+use League\Uri\Schemes\Http;
+use Psr\Http\Message\UriInterface;
 
 class SearchResultUrlParser
 {
+    /**
+     * @var Http
+     */
     protected $url;
 
     protected $baseUrl = 'http://www.leboncoin.fr/';
@@ -22,30 +28,34 @@ class SearchResultUrlParser
             $url = preg_replace('/^[\/]?/', $this->baseUrl, $url);
         }
 
-        $this->url = Url::createFromUrl($url);
+        $this->url = Http::createFromString($url);
         $this->nbPages = $nbPages;
     }
 
+    /**
+     * @return Http
+     */
     public function current()
     {
         // set the default page to 1 unless it is set
-        $query = $this->url->getQuery();
-        isset($query['o']) || $query['o'] = 1;
+        if (!$this->url->query->hasKey('o')) {
+            $this->url = (new MergeQuery('o=1'))($this->url);
+        }
 
         // remove th (thumb image)
-        unset($query['th']);
+        $this->url = (new RemoveQueryKeys(['th']))($this->url);
 
-        return $this->url->setQuery($query);
+        return $this->url;
     }
 
     /**
-     * Return the next page URL or null if none
+     * Return the next page URL or null if non.
      *
-     * @return Url
+     * @return UriInterface
      */
     public function next()
     {
-        if ($this->current()->getQuery()['o'] >= $this->nbPages) {
+        if ((int) $this->current()->query->getValue('o') >= $this->nbPages) {
             return null;
         }
 
@@ -55,23 +65,28 @@ class SearchResultUrlParser
     /**
      * Return the previous page URL or null if none
      *
-     * @return Url
+     * @return UriInterface
      */
     public function previous()
     {
-        if ((int) $this->current()->getQuery()['o'] === 1) {
+        if ((int) $this->current()->query->getValue('o') === 1) {
             return null;
         }
 
         return $this->getIndexUrl(-1);
     }
 
+    /**
+     * @param int $index
+     *
+     * @return UriInterface
+     */
     public function getIndexUrl($index)
     {
-        $query = $this->current()->getQuery();
-        $query['o'] += $index;
+        $oParam = (int) $this->current()->query->getValue('o') + $index;
+        $newQuery = new MergeQuery('o='.$oParam);
 
-        return $this->url->setQuery($query);
+        return $newQuery($this->url);
     }
 
     /**
@@ -82,7 +97,7 @@ class SearchResultUrlParser
     public function getNav()
     {
         return [
-            'page' => (int) $this->current()->getQuery()['o'],
+            'page' => (int) $this->current()->query->getValue('o'),
             'links' => [
                 'current'  => (string) $this->current(),
                 'previous' => (string) $this->previous(),
@@ -98,7 +113,7 @@ class SearchResultUrlParser
      */
     public function getCategory()
     {
-        $category = $this->current()->getPath()[0];
+        $category = $this->current()->path->getSegment(0);
 
         if ($category === 'annonces') {
             return null;
@@ -114,15 +129,15 @@ class SearchResultUrlParser
      */
     public function getSearchArea()
     {
-        if ($this->current()->getPath()[3] === 'occasions') {
+        if ($this->current()->path->getSegment(3) === 'occasions') {
             return 'toute la france';
         }
 
-        if ($this->current()->getPath()[3] === 'bonnes_affaires') {
+        if ($this->current()->path->getSegment(3) === 'bonnes_affaires') {
             return 'regions voisines';
         }
 
-        return $this->current()->getPath()[2];
+        return $this->current()->path->getSegment(2);
     }
 
     /**
@@ -132,7 +147,7 @@ class SearchResultUrlParser
      */
     public function getLocation()
     {
-        return $this->current()->getQuery()['location'] ?: null;
+        return $this->current()->query->getValue('location', null);
     }
 
     /**
@@ -142,7 +157,7 @@ class SearchResultUrlParser
      */
     public function getType()
     {
-        switch ($this->current()->getQuery()['f']) {
+        switch ($this->current()->query->getValue('f')) {
             case 'p':
                 return 'part';
             case 'c':
@@ -159,7 +174,7 @@ class SearchResultUrlParser
      */
     public function getSortType()
     {
-        if ((int) $this->current()->getQuery()['sp'] === 1) {
+        if ((int) $this->current()->query->getValue('sp') === 1) {
             return 'price';
         }
 
