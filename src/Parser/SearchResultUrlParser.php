@@ -39,11 +39,13 @@ class SearchResultUrlParser
     {
         // set the default page to 1 unless it is set
         if (!$this->url->query->hasKey('o')) {
-            $this->url = (new MergeQuery('o=1'))($this->url);
+            $newUrl = new MergeQuery('o=1');
+            $this->url = $newUrl($this->url);
         }
 
         // remove th (thumb image)
-        $this->url = (new RemoveQueryKeys(['th']))($this->url);
+        $newUrl = new RemoveQueryKeys(['th']);
+        $this->url = $newUrl($this->url);
 
         return $this->url;
     }
