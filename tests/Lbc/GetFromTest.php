@@ -11,6 +11,14 @@ use GuzzleHttp\Psr7\Stream;
 
 class GetFromTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetHttpClient()
+    {
+        $client = new Client();
+        $getFrom = new GetFrom($client);
+
+        $this->assertSame($client, $getFrom->getHttpClient());
+    }
+
     public function testGetTheSearchResultData()
     {
         $response = $this->getResponse(
