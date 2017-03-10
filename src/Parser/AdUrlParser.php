@@ -1,4 +1,6 @@
-<?php namespace Lbc\Parser;
+<?php
+
+namespace Lbc\Parser;
 
 use League\Url\Url;
 

@@ -1,4 +1,6 @@
-<?php namespace Lbc;
+<?php
+
+namespace Lbc;
 
 use GuzzleHttp\Client;
 use Lbc\Crawler\AdCrawler;
@@ -17,7 +19,7 @@ class GetFrom
 
     /**
      * Return the http client
-     * (usefull to mock the response for unit testing)
+     * (useful to mock the response for unit testing)
      *
      * @return Client
      */
@@ -62,7 +64,8 @@ class GetFrom
     /**
      * Retrieve the ad's data from an ad's ID and its category
      *
-     * @param $url
+     * @param $id
+     * @param $category
      *
      * @return array
      */
@@ -101,11 +104,11 @@ class GetFrom
      */
     public function ad()
     {
-        if (func_num_args() == 1) {
+        if (func_num_args() === 1) {
             return call_user_func_array([$this, 'adByUrl'], func_get_args());
         }
 
-        if (func_num_args() == 2) {
+        if (func_num_args() === 2) {
             return call_user_func_array([$this, 'adById'], func_get_args());
         }
 

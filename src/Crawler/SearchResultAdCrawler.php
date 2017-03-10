@@ -1,4 +1,6 @@
-<?php namespace Lbc\Crawler;
+<?php
+
+namespace Lbc\Crawler;
 
 use League\Url\Url;
 use Symfony\Component\DomCrawler\Crawler;
@@ -76,7 +78,7 @@ class SearchResultAdCrawler
         $node = $this->node->filter('*[itemprop=price]');
 
         return $this->getFieldValue($node, 0, function ($value) {
-            return (int) preg_replace('/[^\d]/', '', trim($value));
+            return (int) preg_replace('/\D/', '', trim($value));
         });
     }
 
@@ -127,7 +129,7 @@ class SearchResultAdCrawler
             ->first();
 
         if (0 === $image->count()) {
-            return;
+            return null;
         }
 
         $src = $image
@@ -174,7 +176,7 @@ class SearchResultAdCrawler
         $node = $this->node->filter('*[itemprop=category]');
 
         return $this->getFieldValue($node, false, function ($value) {
-            if ('pro' == preg_replace('/[\s()]+/', '', $value)) {
+            if ('pro' === preg_replace('/[\s()]+/', '', $value)) {
                 return 'pro';
             }
 

@@ -1,4 +1,6 @@
-<?php namespace Lbc\Crawler;
+<?php
+
+namespace Lbc\Crawler;
 
 class SearchResultCrawler extends CrawlerAbstract
 {
@@ -48,7 +50,7 @@ class SearchResultCrawler extends CrawlerAbstract
     /**
      * Get an array containing the ads of the current result page
      *
-     * @return Array
+     * @return array
      */
     public function getAds()
     {

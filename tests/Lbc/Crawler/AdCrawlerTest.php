@@ -1,4 +1,6 @@
-<?php namespace Lbc\Crawler;
+<?php
+
+namespace Lbc\Crawler;
 
 class AdCrawlerTest extends \PHPUnit_Framework_TestCase
 {

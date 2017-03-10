@@ -1,4 +1,6 @@
-<?php namespace Lbc\Parser;
+<?php
+
+namespace Lbc\Parser;
 
 use League\Url\UrlImmutable as Url;
 
@@ -11,7 +13,7 @@ class SearchResultUrlParser
     protected $nbPages;
 
     /**
-     * @param $url
+     * @param string $url
      * @param int $nbPages
      */
     public function __construct($url, $nbPages = 1)
@@ -57,7 +59,7 @@ class SearchResultUrlParser
      */
     public function previous()
     {
-        if ($this->current()->getQuery()['o'] == 1) {
+        if ((int) $this->current()->getQuery()['o'] === 1) {
             return null;
         }
 
@@ -157,7 +159,7 @@ class SearchResultUrlParser
      */
     public function getSortType()
     {
-        if ($this->current()->getQuery()['sp'] == 1) {
+        if ((int) $this->current()->getQuery()['sp'] === 1) {
             return 'price';
         }
 

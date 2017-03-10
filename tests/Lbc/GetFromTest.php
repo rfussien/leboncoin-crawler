@@ -1,5 +1,8 @@
-<?php namespace Lbc;
+<?php
 
+namespace Lbc;
+
+use BadMethodCallException;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Subscriber\Mock;
@@ -29,7 +32,7 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('basse_normandie', $data['search_area']);
         $this->assertEquals('date', $data['sort_by']);
         $this->assertEquals('all', $data['type']);
-        $this->assertEquals(35, count($data['ads']));
+        $this->assertCount(35, $data['ads']);
     }
 
     public function testGetTheDetailedAdInTheSearchResult()
@@ -82,8 +85,8 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($dataById, $dataByUrl);
         $this->assertEquals('897011669', $dataById['id']);
         $this->assertEquals('ventes_immobilieres', $dataById['category']);
-        $this->assertEquals(3, count($dataById['thumbs']));
-        $this->assertEquals(3, count($dataById['pictures']));
+        $this->assertCount(3, $dataById['thumbs']);
+        $this->assertCount(3, $dataById['pictures']);
         $this->assertEquals('Appartement F3 de 71m2,Clermont-fd hyper centre', $dataById['title']);
         $this->assertEquals('63000', $dataById['cp']);
         $this->assertEquals('Clermont-Ferrand', $dataById['city']);
@@ -99,13 +102,13 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
     private function getResponse($file)
     {
         $response = new Response(200);
-        $response->setBody(Stream::factory(fopen($file, 'r')));
+        $response->setBody(Stream::factory(fopen($file, 'rb')));
 
         return $response;
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Bad number of argument
      */
     public function testAnExceptionIsThrownWhenBadNumberOfArgumentAreUsed()

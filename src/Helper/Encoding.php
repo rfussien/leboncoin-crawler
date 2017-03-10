@@ -1,4 +1,6 @@
-<?php namespace Lbc\Helper;
+<?php
+
+namespace Lbc\Helper;
 
 class Encoding
 {
@@ -19,7 +21,6 @@ class Encoding
         );
 
         $ret = array_map(function ($chr) use ($alnumPattern) {
-
             if (preg_match($alnumPattern, $chr)) {
                 return $chr;
             }
