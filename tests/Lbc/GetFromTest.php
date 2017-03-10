@@ -3,9 +3,11 @@
 namespace Lbc;
 
 use BadMethodCallException;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
-use GuzzleHttp\Subscriber\Mock;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 
 class GetFromTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,11 +17,11 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
             dirname(__DIR__) . '/content/search_result.html'
         );
 
-        $mock = new Mock();
-        $mock->addResponse($response);
+        $mock = new MockHandler([$response]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
 
-        $getFrom = new GetFrom();
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
+        $getFrom = new GetFrom($client);
 
         $url = 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=100000&fu=2&gb=2';
         $data = $getFrom->search($url);
@@ -41,11 +43,10 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
             dirname(__DIR__) . '/content/search_result.html'
         );
 
-        $mock = new Mock();
-        $mock->addResponse($response);
-
-        $getFrom = new GetFrom();
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
+        $mock = new MockHandler([$response]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $getFrom = new GetFrom($client);
 
         $url = 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=70000&fu=2&gb=2';
         $data = $getFrom->search($url, true);
@@ -71,13 +72,11 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
             dirname(__DIR__) . '/content/ad_897011669.html'
         );
 
-        $mock = new Mock();
-        $mock->addResponse($response);
-        $mock->addResponse($response);
+        $mock = new MockHandler([$response, $response]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
 
-        $getFrom = new GetFrom();
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
+        $getFrom = new GetFrom($client);
 
         $dataByUrl = $getFrom->ad('http://www.leboncoin.fr/ventes_immobilieres/897011669.htm?ca=3_s');
         $dataById = $getFrom->ad('897011669', 'ventes_immobilieres');
@@ -101,10 +100,7 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
 
     private function getResponse($file)
     {
-        $response = new Response(200);
-        $response->setBody(Stream::factory(fopen($file, 'rb')));
-
-        return $response;
+        return new Response(200, [], new Stream(fopen($file, 'rb')));
     }
 
     /**
