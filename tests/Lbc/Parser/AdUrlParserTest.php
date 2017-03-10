@@ -1,4 +1,6 @@
-<?php namespace Lbc\Parser;
+<?php
+
+namespace Lbc\Parser;
 
 class AdUrlParserTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,22 +1,35 @@
-<?php namespace Lbc;
+<?php
 
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
-use GuzzleHttp\Subscriber\Mock;
+namespace Lbc;
+
+use BadMethodCallException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 
 class GetFromTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetHttpClient()
+    {
+        $client = new Client();
+        $getFrom = new GetFrom($client);
+
+        $this->assertSame($client, $getFrom->getHttpClient());
+    }
+
     public function testGetTheSearchResultData()
     {
         $response = $this->getResponse(
             dirname(__DIR__) . '/content/search_result.html'
         );
 
-        $mock = new Mock();
-        $mock->addResponse($response);
+        $mock = new MockHandler([$response]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
 
-        $getFrom = new GetFrom();
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
+        $getFrom = new GetFrom($client);
 
         $url = 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=100000&fu=2&gb=2';
         $data = $getFrom->search($url);
@@ -29,7 +42,7 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('basse_normandie', $data['search_area']);
         $this->assertEquals('date', $data['sort_by']);
         $this->assertEquals('all', $data['type']);
-        $this->assertEquals(35, count($data['ads']));
+        $this->assertCount(35, $data['ads']);
     }
 
     public function testGetTheDetailedAdInTheSearchResult()
@@ -38,11 +51,10 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
             dirname(__DIR__) . '/content/search_result.html'
         );
 
-        $mock = new Mock();
-        $mock->addResponse($response);
-
-        $getFrom = new GetFrom();
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
+        $mock = new MockHandler([$response]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
+        $getFrom = new GetFrom($client);
 
         $url = 'http://www.leboncoin.fr/voitures/offres/basse_normandie/?f=a&th=1&ms=30000&me=70000&fu=2&gb=2';
         $data = $getFrom->search($url, true);
@@ -68,13 +80,11 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
             dirname(__DIR__) . '/content/ad_897011669.html'
         );
 
-        $mock = new Mock();
-        $mock->addResponse($response);
-        $mock->addResponse($response);
+        $mock = new MockHandler([$response, $response]);
+        $handler = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handler]);
 
-        $getFrom = new GetFrom();
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
-        $getFrom->getHttpClient()->getEmitter()->attach($mock);
+        $getFrom = new GetFrom($client);
 
         $dataByUrl = $getFrom->ad('http://www.leboncoin.fr/ventes_immobilieres/897011669.htm?ca=3_s');
         $dataById = $getFrom->ad('897011669', 'ventes_immobilieres');
@@ -82,8 +92,8 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($dataById, $dataByUrl);
         $this->assertEquals('897011669', $dataById['id']);
         $this->assertEquals('ventes_immobilieres', $dataById['category']);
-        $this->assertEquals(3, count($dataById['thumbs']));
-        $this->assertEquals(3, count($dataById['pictures']));
+        $this->assertCount(3, $dataById['thumbs']);
+        $this->assertCount(3, $dataById['pictures']);
         $this->assertEquals('Appartement F3 de 71m2,Clermont-fd hyper centre', $dataById['title']);
         $this->assertEquals('63000', $dataById['cp']);
         $this->assertEquals('Clermont-Ferrand', $dataById['city']);
@@ -98,14 +108,11 @@ class GetFromTest extends \PHPUnit_Framework_TestCase
 
     private function getResponse($file)
     {
-        $response = new Response(200);
-        $response->setBody(Stream::factory(fopen($file, 'r')));
-
-        return $response;
+        return new Response(200, [], new Stream(fopen($file, 'rb')));
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Bad number of argument
      */
     public function testAnExceptionIsThrownWhenBadNumberOfArgumentAreUsed()

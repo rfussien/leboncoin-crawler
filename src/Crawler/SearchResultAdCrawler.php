@@ -1,6 +1,9 @@
-<?php namespace Lbc\Crawler;
+<?php
 
-use League\Url\Url;
+namespace Lbc\Crawler;
+
+use League\Uri\Components\Scheme;
+use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -76,7 +79,7 @@ class SearchResultAdCrawler
         $node = $this->node->filter('*[itemprop=price]');
 
         return $this->getFieldValue($node, 0, function ($value) {
-            return (int) preg_replace('/[^\d]/', '', trim($value));
+            return (int) preg_replace('/\D/', '', trim($value));
         });
     }
 
@@ -87,9 +90,7 @@ class SearchResultAdCrawler
      */
     public function getUrl()
     {
-        return Url::createFromUrl($this->url)
-            ->setScheme('http')
-            ->__toString();
+        return (string)Http::createFromString($this->url)->withScheme('http');
     }
 
     /**
@@ -127,17 +128,14 @@ class SearchResultAdCrawler
             ->first();
 
         if (0 === $image->count()) {
-            return;
+            return null;
         }
 
         $src = $image
             ->attr('data-imgsrc')
         ;
 
-        return Url::createFromUrl($src)
-                ->setScheme('http')
-                ->__toString()
-        ;
+        return (string)Http::createFromString($src)->withScheme('http');
     }
 
     /**
@@ -174,7 +172,7 @@ class SearchResultAdCrawler
         $node = $this->node->filter('*[itemprop=category]');
 
         return $this->getFieldValue($node, false, function ($value) {
-            if ('pro' == preg_replace('/[\s()]+/', '', $value)) {
+            if ('pro' === preg_replace('/[\s()]+/', '', $value)) {
                 return 'pro';
             }
 

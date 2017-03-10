@@ -1,4 +1,6 @@
-<?php namespace Lbc\Crawler;
+<?php
+
+namespace Lbc\Crawler;
 
 use Symfony\Component\DomCrawler\Crawler;
 

@@ -1,4 +1,6 @@
-<?php namespace Lbc\Crawler;
+<?php
+
+namespace Lbc\Crawler;
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -68,6 +70,6 @@ class SearchResultCrawlerTest extends \PHPUnit_Framework_TestCase
     {
         $search = new SearchResultCrawler($this->searchContent);
 
-        $this->assertEquals(35, count($search->getAds()));
+        $this->assertCount(35, $search->getAds());
     }
 }

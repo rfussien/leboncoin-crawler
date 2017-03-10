@@ -1,7 +1,9 @@
-<?php namespace Lbc\Crawler;
+<?php
+
+namespace Lbc\Crawler;
 
 use Lbc\Helper\Encoding;
-use League\Url\Url;
+use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdCrawler extends CrawlerAbstract
@@ -39,9 +41,7 @@ class AdCrawler extends CrawlerAbstract
         $node
             ->filter('.lbcImages > meta[itemprop="image"]')
             ->each(function (Crawler $link, $i) use (&$pictures) {
-                $pictures[$i] = Url::createFromUrl($link->attr('content'))
-                    ->setScheme('http')
-                    ->__toString();
+                $pictures[$i] = (string)Http::createFromString($link->attr('content'))->withScheme('http');
             });
 
         return $pictures;
@@ -50,28 +50,19 @@ class AdCrawler extends CrawlerAbstract
     /**
      * Return an array with the pictures url
      *
-     * @param Crawler $node
      * @return array
      */
-    public function getPictures(Crawler $node = null)
+    public function getPictures()
     {
-        if (!($node instanceof Crawler)) {
-            $node = $this->crawler;
-        }
-
-        $pictures = [];
-
-        foreach ($this->getThumbs() as $k => $v) {
-            $v = preg_replace('/thumbs/', 'images', $v);
-
-            $pictures[$k] = $v;
-        }
-
-        return $pictures;
+        return array_map(function ($picture) {
+            return str_replace('thumbs', 'images', $picture);
+        }, $this->getThumbs());
     }
 
     /**
-     * Return the common informations (price, cp, city)
+     * Return the common information (price, cp, city)
+     *
+     * @param Crawler $node
      *
      * @return array
      */
@@ -91,7 +82,7 @@ class AdCrawler extends CrawlerAbstract
                 return $param->text();
             });
 
-        $info['price'] = (int)preg_replace('/[^\d]/', '', $info['price']);
+        $info['price'] = (int)preg_replace('/\D/', '', $info['price']);
 
         return $info;
     }
@@ -108,11 +99,8 @@ class AdCrawler extends CrawlerAbstract
             $node = $this->crawler;
         }
 
-
         $description = $node->filter('.AdviewContent > .content')->html();
-        $description = str_replace("\n", ' ', $description);
-        $description = str_replace('<br><br>', "\n", $description);
-        $description = str_replace('<br>', ' ', $description);
+        $description = str_replace(["\n", '<br><br>', '<br>'], [' ', "\n", ' '], $description);
         $description = preg_replace('/ +/', ' ', $description);
 
         return trim($description);
@@ -120,6 +108,8 @@ class AdCrawler extends CrawlerAbstract
 
     /**
      * Return the criterias
+     *
+     * @param Crawler $node
      *
      * @return array
      */
