@@ -2,7 +2,6 @@
 
 namespace Lbc\Crawler;
 
-use League\Uri\Components\Scheme;
 use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
