@@ -2,7 +2,6 @@
 
 namespace Lbc\Parser;
 
-use League\Uri\Components\Query;
 use League\Uri\Modifiers\RemoveQueryKeys;
 use League\Uri\Schemes\Http;
 

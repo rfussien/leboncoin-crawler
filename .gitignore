@@ -1,6 +1,4 @@
 build
 composer.lock
 docs
-node_modules
-npm-debug.log
 vendor
