@@ -41,7 +41,7 @@ an api, who knows...).
 
 ## Requirements
 
-- PHP 5.6 | 7, HHVM (PHP 5.4 and 5.5 may work)
+- PHP 5.6 | 7 | 7.1, HHVM
 - [optional] PHPUnit to execute the test suite
 
 ## Install
@@ -158,7 +158,12 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details
 
 ## Security
 
-If you discover any security related issues, please email :author_email instead of using the issue tracker.
+If you discover any security related issues, please email me (<mailto:remi.fussien@gmail.com>) instead of using the issue tracker.
+
+## Credits
+
+- [Rémi FUSSIEN][link-author]
+- [All Contributors][link-contributors]
 
 ## License
 
