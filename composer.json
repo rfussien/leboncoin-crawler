@@ -1,7 +1,7 @@
 {
     "name": "rfussien/leboncoin-crawler",
     "type": "library",
-    "description": "Makes easy the data extraction from leboncoin.fr",
+    "description": "Makes data extraction from leboncoin.fr easy",
     "homepage": "https://github.com/rfussien/leboncoin-crawler",
     "license": "MIT",
     "authors": [{
