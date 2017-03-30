@@ -1,12 +1,12 @@
 Crawler for leboncoin.fr
 ========================
 
-[![Build Status](https://api.travis-ci.org/rfussien/leboncoin-crawler.svg)](https://travis-ci.org/rfussien/leboncoin-crawler/)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler/badges/quality-score.png)](https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler/)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/b9916e36-30d9-4d16-ba5c-c1077b45b37e/mini.png)](https://insight.sensiolabs.com/projects/b9916e36-30d9-4d16-ba5c-c1077b45b37e)
-[![Latest Stable Version](https://poser.pugx.org/rfussien/leboncoin-crawler/v/stable.svg)](https://packagist.org/packages/rfussien/leboncoin-crawler)
-[![Latest Unstable Version](https://poser.pugx.org/rfussien/leboncoin-crawler/v/unstable.svg)](https://packagist.org/packages/rfussien/leboncoin-crawler)
-[![License](https://poser.pugx.org/rfussien/leboncoin-crawler/license.svg)](https://packagist.org/packages/rfussien/leboncoin-crawler)
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+[![Total Downloads][ico-downloads]][link-downloads]
 
 This is a small crawler package for the site [leboncoin.fr](http://www.leboncoin.fr).
 
@@ -168,3 +168,19 @@ If you discover any security related issues, please email me (<mailto:remi.fussi
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+
+[ico-version]: https://img.shields.io/packagist/v/rfussien/leboncoin-crawler.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/rfussien/leboncoin-crawler/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rfussien/leboncoin-crawler.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/rfussien/leboncoin-crawler.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/rfussien/leboncoin-crawler.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/rfussien/leboncoin-crawler
+[link-travis]: https://travis-ci.org/rfussien/leboncoin-crawler
+[link-scrutinizer]: https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/rfussien/leboncoin-crawler
+[link-downloads]: https://packagist.org/packages/rfussien/leboncoin-crawler
+[link-author]: https://github.com/:author_username
+[link-contributors]: ../../contributors
