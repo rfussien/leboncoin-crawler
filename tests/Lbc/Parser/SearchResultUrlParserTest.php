@@ -21,7 +21,8 @@ class SearchResultUrlParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($urlParser->current()->query->getValue('th'));
     }
 
-    public function testItHasADefaultPage() {
+    public function testItHasADefaultPage()
+    {
         $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/');
 
         $this->assertNotEmpty($urlParser->current()->query->getValue('o'));
@@ -119,7 +120,9 @@ class SearchResultUrlParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnTheCorrectLocation()
     {
-        $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/?location=Caen%2014000%2CVerson%2014790');
+        $urlParser = new SearchResultUrlParser(
+            'voitures/offres/basse_normandie/?location=Caen%2014000%2CVerson%2014790'
+        );
 
         $this->assertEquals('Caen 14000,Verson 14790', $urlParser->getLocation());
     }

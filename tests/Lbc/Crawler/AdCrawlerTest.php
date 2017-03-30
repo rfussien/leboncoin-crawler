@@ -46,16 +46,17 @@ class AdCrawlerTest extends \PHPUnit_Framework_TestCase
                 'classe_energie' => 'D (de 151 à 230)',
             ),
             'description' =>
-                'Quartier galaxie,rue fontgiève à 5 minutes à pied '.
-                'du centre-ville, proche de toutes '.
-                'commodités,bus,supermarche,école,la banque,la '.
-                "poste...\nParticulier à vendre appartement F3 de 71 m2 très " .
-                'lumineux,sejour double exposition(sud '.
-                'ouest),cuisine equipée,2 chambres,Salle de bain, '.
-                'WC séparé et de nombreux rangement.Fenêtres double '.
-                'vitrage,volets roulants électrique,très bon etat '.
-                'general,1 place de parking couverte et sécurisée '.
-                "en rez de chaussée,en face de la gardienne.\nPRIX: 118000 Euros\nTEL: 0671014891 Email: clermaison@yahoo.fr",
+            'Quartier galaxie,rue fontgiève à 5 minutes à pied ' .
+            'du centre-ville, proche de toutes ' .
+            'commodités,bus,supermarche,école,la banque,la ' .
+            "poste...\nParticulier à vendre appartement F3 de 71 m2 très " .
+            'lumineux,sejour double exposition(sud ' .
+            'ouest),cuisine equipée,2 chambres,Salle de bain, ' .
+            'WC séparé et de nombreux rangement.Fenêtres double ' .
+            'vitrage,volets roulants électrique,très bon etat ' .
+            'general,1 place de parking couverte et sécurisée ' .
+            "en rez de chaussée,en face de la gardienne.\nPRIX: " .
+            "118000 Euros\nTEL: 0671014891 Email: clermaison@yahoo.fr",
         );
     }
 
@@ -74,8 +75,10 @@ class AdCrawlerTest extends \PHPUnit_Framework_TestCase
 
     public function testWeRetrieveThePictures()
     {
-        $this->assertEquals($this->adInfo['pictures'],
-            $this->adCrawler->getPictures());
+        $this->assertEquals(
+            $this->adInfo['pictures'],
+            $this->adCrawler->getPictures()
+        );
     }
 
     public function testRetriveTheCommonInfo()
@@ -92,14 +95,18 @@ class AdCrawlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTheAdDescription()
     {
-        $this->assertEquals($this->adInfo['description'],
-            $this->adCrawler->getDescription());
+        $this->assertEquals(
+            $this->adInfo['description'],
+            $this->adCrawler->getDescription()
+        );
     }
 
     public function testTheAdCriterias()
     {
-        $this->assertEquals($this->adInfo['criterias'],
-            $this->adCrawler->getCriterias());
+        $this->assertEquals(
+            $this->adInfo['criterias'],
+            $this->adCrawler->getCriterias()
+        );
     }
 
     public function testTheFullAdInformation()
