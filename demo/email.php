@@ -40,7 +40,6 @@ $newAds = 0;
 $searchResults = (new Lbc\GetFrom)->search($leboncoin_result_url, true);
 
 foreach ($searchResults['ads'] as $ad) {
-
     if (in_array($ad->id, $knownAds)) {
         continue;
     }
