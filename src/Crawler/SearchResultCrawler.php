@@ -2,8 +2,23 @@
 
 namespace Lbc\Crawler;
 
+use Lbc\Parser\SearchResultUrlParser;
+
+/**
+ * Class SearchResultCrawler
+ * @package Lbc\node
+ */
 class SearchResultCrawler extends CrawlerAbstract
 {
+    /**
+     * @param $url
+     * @return SearchResultUrlParser
+     */
+    protected function setUrlParser($url)
+    {
+        $this->url = new SearchResultUrlParser($url);
+    }
+
     /**
      * Return the total number of ads of the search
      *
@@ -11,7 +26,7 @@ class SearchResultCrawler extends CrawlerAbstract
      */
     public function getNbAds()
     {
-        $nbAds = $this->crawler
+        $nbAds = $this->node
             ->filter('a.tabsSwitch span.tabsSwitchNumbers')
             ->first();
 
@@ -56,9 +71,13 @@ class SearchResultCrawler extends CrawlerAbstract
     {
         $ads = array();
 
-        $this->crawler->filter('[itemtype="http://schema.org/Offer"] > a')
+        $this->node->filter('[itemtype="http://schema.org/Offer"]')
             ->each(function ($node) use (&$ads) {
-                $ad = (new SearchResultAdCrawler($node))->getAll();
+                $ad = (new SearchResultAdCrawler(
+                    $node,
+                    $node->filter('a')->attr('href')
+                ))->getAll();
+
                 $ads [$ad->id] = $ad;
             });
 
@@ -66,19 +85,12 @@ class SearchResultCrawler extends CrawlerAbstract
     }
 
     /**
-     * Return the Ad's ID
+     * Return the Ads's ID only
      *
      * @return array
      */
     public function getAdsId()
     {
-        $adsID = array();
-
-        $this->crawler->filter('[itemtype="http://schema.org/Offer"] > a')
-            ->each(function ($node) use (&$adsID) {
-                $adsID [] = (new SearchResultAdCrawler($node))->getId();
-            });
-
-        return $adsID;
+        return array_keys($this->getAds());
     }
 }

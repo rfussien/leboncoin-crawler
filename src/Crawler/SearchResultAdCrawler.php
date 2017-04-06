@@ -2,46 +2,26 @@
 
 namespace Lbc\Crawler;
 
+use Lbc\Filter\DafaultSanitizer;
+use Lbc\Filter\PriceSanitizer;
+use Lbc\Parser\AdUrlParser;
+use Lbc\Parser\SearchResultUrlParser;
 use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
- * At the moment I'm writing this piece of code, an ads follow this
- * structure:
- *
- *     <a href="http://www.leboncoin.fr/{{ $category }}/{{ $id }}.htm?ca=4_s" title="{{ $title }}">
- *         <div class="lbc">
- *             <div class="date">
- *                 <div>{{ $date }}</div>
- *                 <div>{{ $time }}</div>
- *             </div>
- *             <div class="image">
- *                 <div class="image-and-nb">
- *                     <img src="{{ $imageThumbUrl }}" alt="{{ $title }}">
- *                     <div class="nb">
- *                         <div class="top radius">&nbsp;</div>
- *                         <div class="value radius">{{ $nbImages}}</div>
- *                     </div>
- *                 </div>
- *             </div>
- *             <div class="detail">
- *                 <div class="title">{{ $title }}</div>
- *                 <div class="category">{{ $pro }}</div>
- *                 <div class="placement">{{ $placement }}</div>
- *                 <div class="price">{{ $price }}&nbsp;€</div>
- *             </div>
- *         </div>
- *     </a>
+ * Class SearchResultAdCrawler
+ * @package Lbc\Crawler
  */
-class SearchResultAdCrawler
+class SearchResultAdCrawler extends CrawlerAbstract
 {
-    protected $node;
-    protected $url;
-
-    public function __construct(Crawler $node)
+    /**
+     * @param $url
+     * @return SearchResultUrlParser
+     */
+    protected function setUrlParser($url)
     {
-        $this->node = $node;
-        $this->url = $node->attr('href');
+        $this->url = new AdUrlParser($url);
     }
 
     /**
@@ -51,9 +31,7 @@ class SearchResultAdCrawler
      */
     public function getId()
     {
-        $path = parse_url($this->url)['path'];
-
-        return preg_replace('/\/\w+\/(\d+)\.htm/', '$1', $path);
+        return $this->url->getId();
     }
 
     /**
@@ -63,9 +41,7 @@ class SearchResultAdCrawler
      */
     public function getTitle()
     {
-        return $this->getFieldValue($this->node, 0, function ($value) {
-            return trim($value);
-        }, 'attr', 'title');
+        return DafaultSanitizer::clean($this->node->filter('h2')->text());
     }
 
     /**
@@ -75,11 +51,12 @@ class SearchResultAdCrawler
      */
     public function getPrice()
     {
-        $node = $this->node->filter('*[itemprop=price]');
-
-        return $this->getFieldValue($node, 0, function ($value) {
-            return (int) preg_replace('/\D/', '', trim($value));
-        });
+        if ($this->node->filter('*[itemprop=price]')->count()) {
+            return PriceSanitizer::clean(
+                $this->node->filter('*[itemprop=price]')->text()
+            );
+        }
+        return 0;
     }
 
     /**
@@ -89,7 +66,7 @@ class SearchResultAdCrawler
      */
     public function getUrl()
     {
-        return (string)Http::createFromString($this->url)->withScheme('http');
+        return (string)Http::createFromString($this->url)->withScheme('https');
     }
 
     /**
@@ -101,8 +78,7 @@ class SearchResultAdCrawler
     {
         $node = $this->node
             ->filter('*[itemprop=availabilityStarts]')
-            ->first()
-        ;
+            ->first();
 
         $date = $node->attr('content');
 
@@ -112,7 +88,7 @@ class SearchResultAdCrawler
             return substr($value, strpos($value, ',') + 2);
         });
 
-        return $date.' '.$time;
+        return $date . ' ' . $time;
     }
 
     /**
@@ -131,10 +107,9 @@ class SearchResultAdCrawler
         }
 
         $src = $image
-            ->attr('data-imgsrc')
-        ;
+            ->attr('data-imgsrc');
 
-        return (string)Http::createFromString($src)->withScheme('http');
+        return (string)Http::createFromString($src)->withScheme('https');
     }
 
     /**
@@ -179,18 +154,21 @@ class SearchResultAdCrawler
         });
     }
 
+    /**
+     * @return object
+     */
     public function getAll()
     {
-        return (object) [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'price' => $this->getPrice(),
-            'url' => $this->getUrl(),
+        return (object)[
+            'id'         => $this->getId(),
+            'title'      => $this->getTitle(),
+            'price'      => $this->getPrice(),
+            'url'        => $this->getUrl(),
             'created_at' => $this->getCreatedAt(),
-            'thumb' => $this->getThumb(),
-            'nb_image' => $this->getNbImage(),
-            'placement' => $this->getPlacement(),
-            'type' => $this->getType(),
+            'thumb'      => $this->getThumb(),
+            'nb_image'   => $this->getNbImage(),
+            'placement'  => $this->getPlacement(),
+            'type'       => $this->getType(),
         ];
     }
 
