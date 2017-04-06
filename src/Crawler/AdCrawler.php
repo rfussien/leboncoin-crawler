@@ -49,10 +49,12 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getPictures(Crawler $node = null)
     {
+        $node = $node ?: $this->node;
+
         $images = [];
         $images_thumbs = [];
 
-        $this->node
+        $node
             ->filter('.adview_main script')
             ->each(function (Crawler $crawler) use (&$images, &$images_thumbs) {
                 preg_match_all(
@@ -95,8 +97,7 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getProperties(Crawler $node = null)
     {
-//        $node = $node ?: $this->node;
-        $node = $this->node;
+        $node = $node ?: $this->node;
 
         $properties = [];
 
