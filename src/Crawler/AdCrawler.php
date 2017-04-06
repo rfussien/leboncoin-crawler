@@ -2,12 +2,30 @@
 
 namespace Lbc\Crawler;
 
-use Lbc\Helper\Encoding;
+use Lbc\Filter\CitySanitizer;
+use Lbc\Filter\CpSanitizer;
+use Lbc\Filter\DefaultSanitizer;
+use Lbc\Filter\KeySanitizer;
+use Lbc\Filter\PriceSanitizer;
+use Lbc\Parser\AdUrlParser;
 use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * Class AdCrawler
+ * @package Lbc\Crawler
+ */
 class AdCrawler extends CrawlerAbstract
 {
+    /**
+     * @param $url
+     * @return AdUrlParser
+     */
+    protected function setUrlParser($url)
+    {
+        $this->url = new AdUrlParser($url);
+    }
+
     /**
      * Return a full ad information
      *
@@ -16,11 +34,13 @@ class AdCrawler extends CrawlerAbstract
     public function getAll()
     {
         return array_merge(
-            ['thumbs' => $this->getThumbs()],
-            ['pictures' => $this->getPictures()],
-            $this->getCommonInfo(),
-            ['criterias' => $this->getCriterias()],
-            ['description' => $this->getDescription()]
+            [
+                'id'       => $this->getUrlParser()->getId(),
+                'category' => $this->getUrlParser()->getCategory(),
+            ],
+            $this->getPictures(),
+            $this->getProperties(),
+            $this->getDescription()
         );
     }
 
@@ -30,33 +50,45 @@ class AdCrawler extends CrawlerAbstract
      * @param Crawler $node
      * @return array
      */
-    public function getThumbs(Crawler $node = null)
+    public function getPictures(Crawler $node = null)
     {
-        if (!($node instanceof Crawler)) {
-            $node = $this->crawler;
-        }
+        $node = $node ?: $this->node;
 
-        $pictures = [];
+        $images = [];
+        $images_thumbs = [];
 
         $node
-            ->filter('.lbcImages > meta[itemprop="image"]')
-            ->each(function (Crawler $link, $i) use (&$pictures) {
-                $pictures[$i] = (string)Http::createFromString($link->attr('content'))->withScheme('http');
+            ->filter('.adview_main script')
+            ->each(function (Crawler $crawler) use (&$images, &$images_thumbs) {
+                preg_match_all(
+                    '#//img.+.leboncoin.fr/.*\.jpg#',
+                    $crawler->html(),
+                    $matches
+                );
+
+                if (count($matches[0]) > 0) {
+                    foreach ($matches[0] as $image) {
+                        if (preg_match('/thumb/', $image)) {
+                            array_push(
+                                $images_thumbs,
+                                (string)Http::createFromString($image)
+                                    ->withScheme($this->sheme)
+                            );
+                        } else {
+                            array_push(
+                                $images,
+                                (string)Http::createFromString($image)
+                                    ->withScheme($this->sheme)
+                            );
+                        }
+                    }
+                }
             });
 
-        return $pictures;
-    }
-
-    /**
-     * Return an array with the pictures url
-     *
-     * @return array
-     */
-    public function getPictures()
-    {
-        return array_map(function ($picture) {
-            return str_replace('thumbs', 'images', $picture);
-        }, $this->getThumbs());
+        return [
+            'images'        => $images,
+            'images_thumbs' => $images_thumbs,
+        ];
     }
 
     /**
@@ -66,25 +98,28 @@ class AdCrawler extends CrawlerAbstract
      *
      * @return array
      */
-    public function getCommonInfo(Crawler $node = null)
+    public function getProperties(Crawler $node = null)
     {
-        if (!($node instanceof Crawler)) {
-            $node = $this->crawler;
-        }
+        $node = $node ?: $this->node;
 
-        $info = [];
+        $properties = [];
 
-        $info['title'] = $node->filter('#ad_subject')->text();
+        $properties['title'] = DefaultSanitizer::clean(
+            $this->node->filter('h1')->text()
+        );
 
-        list($info['price'], $info['city'], $info['cp']) = $node
-            ->filter('.lbcParams')->first()->filter('td')
-            ->each(function (Crawler $param) {
-                return $param->text();
+        $node->filter('h2')
+            ->each(function (Crawler $crawler) use (&$properties) {
+                $properties = array_merge(
+                    $properties,
+                    $this->sanitize(
+                        $crawler->filter('.property')->text(),
+                        $crawler->filter('.value')->text()
+                    )
+                );
             });
 
-        $info['price'] = (int)preg_replace('/\D/', '', $info['price']);
-
-        return $info;
+        return ['properties' => $properties];
     }
 
     /**
@@ -95,76 +130,31 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getDescription(Crawler $node = null)
     {
-        if (!($node instanceof Crawler)) {
-            $node = $this->crawler;
-        }
-
-        $description = $node->filter('.AdviewContent > .content')->html();
-        $description = str_replace(["\n", '<br><br>', '<br>'], [' ', "\n", ' '], $description);
-        $description = preg_replace('/ +/', ' ', $description);
-
-        return trim($description);
+        return ['description' => $this->node->filter("p#description")->text()];
     }
 
     /**
-     * Return the criterias
+     * Transform the properties name into a snake_case string
      *
-     * @param Crawler $node
-     *
-     * @return array
-     */
-    public function getCriterias(Crawler $node = null)
-    {
-        if (!($node instanceof Crawler)) {
-            $node = $this->crawler;
-        }
-
-        $criterias = [];
-        $node
-            ->filter('div.criterias tr')
-            ->each(function ($criteria) use (&$criterias) {
-                $name = static::parseCriteriaName($criteria);
-                $value = static::parseCriteriaValue($criteria);
-
-                $criterias[$name] = $value;
-            });
-
-        return $criterias;
-    }
-
-    /**
-     * Transform the criteria's name into a snake_case string
-     *
-     * @param Crawler $node
+     * @param string $value
      * @return string
      */
-    protected static function parseCriteriaName(Crawler $node)
+    private function sanitize($key, $value)
     {
-        return preg_replace(
-            '/\s/',
-            '_',
-            trim(
-                strtolower(
-                    Encoding::toAscii($node->filter('th')->text())
-                )
-            )
-        );
-    }
+        $key = KeySanitizer::clean($key);
 
-    /**
-     * Clean the data
-     *
-     * @param Crawler $node
-     * @return string
-     */
-    protected static function parseCriteriaValue(Crawler $node)
-    {
-        return trim(
-            preg_replace(
-                '/document\.write\(.*\);/',
-                '',
-                $node->filter('td')->text()
-            )
-        );
+        switch ($key) {
+            case 'prix':
+                return ['price' => PriceSanitizer::clean($value)];
+                break;
+            case 'ville':
+                return [
+                    'city' => CitySanitizer::clean($value),
+                    'cp'   => CpSanitizer::clean($value),
+                ];
+                break;
+            default:
+                return [$key => DefaultSanitizer::clean($value)];
+        }
     }
 }

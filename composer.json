@@ -1,7 +1,7 @@
 {
     "name": "rfussien/leboncoin-crawler",
     "type": "library",
-    "description": "Makes easy the data extraction from leboncoin.fr",
+    "description": "Makes data extraction from leboncoin.fr easy",
     "homepage": "https://github.com/rfussien/leboncoin-crawler",
     "license": "MIT",
     "authors": [{
@@ -9,12 +9,12 @@
         "email": "remi.fussien@gmail.com"
     }],
     "require": {
-        "php": ">=5.6",
+        "guzzlehttp/guzzle": "^6",
         "league/uri": "^4",
-        "nesbot/carbon": "~1.13",
+        "nesbot/carbon": "~1.22",
+        "php": ">=5.6",
         "symfony/css-selector": "~3",
-        "symfony/dom-crawler": "~3",
-        "guzzlehttp/guzzle": "^6"
+        "symfony/dom-crawler": "~3"
     },
     "require-dev": {
         "phpunit/phpunit": "~5",
@@ -25,12 +25,22 @@
             "Lbc\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Lbc\\": "tests"
+        }
+    },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
+        "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "2.1.x-dev"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }

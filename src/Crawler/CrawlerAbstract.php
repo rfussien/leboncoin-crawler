@@ -4,25 +4,60 @@ namespace Lbc\Crawler;
 
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * Class CrawlerAbstract
+ * @package Lbc\Crawler
+ */
 abstract class CrawlerAbstract
 {
-    protected $crawler;
+    /**
+     * @var string
+     */
+    protected $sheme = 'https';
 
     /**
-     * @param $payload
+     * @var Crawler
      */
-    public function __construct($payload = null)
+    protected $node;
+
+    /**
+     * @var
+     */
+    protected $url;
+
+    /**
+     * CrawlerAbstract constructor.
+     * @param Crawler $node
+     * @param $url
+     */
+    public function __construct(Crawler $node, $url)
     {
-        $this->crawler = new Crawler($payload);
+        $this->node = $node;
+
+        $this->setUrlParser($url);
     }
 
     /**
-     * Return the crawler
+     * Return the current node
      *
      * @return Crawler
      */
     public function getCrawler()
     {
-        return $this->crawler;
+        return $this->node;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUrlParser()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param $url
+     * @return mixed
+     */
+    abstract protected function setUrlParser($url);
 }

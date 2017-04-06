@@ -7,6 +7,10 @@ use League\Uri\Modifiers\RemoveQueryKeys;
 use League\Uri\Schemes\Http;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * Class SearchResultUrlParser
+ * @package Lbc\Parser
+ */
 class SearchResultUrlParser
 {
     /**
@@ -14,8 +18,9 @@ class SearchResultUrlParser
      */
     protected $url;
 
-    protected $baseUrl = 'http://www.leboncoin.fr/';
-
+    /**
+     * @var int
+     */
     protected $nbPages;
 
     /**
@@ -24,11 +29,8 @@ class SearchResultUrlParser
      */
     public function __construct($url, $nbPages = 1)
     {
-        if (!preg_match('/^.*leboncoin.fr/', $url)) {
-            $url = preg_replace('/^[\/]?/', $this->baseUrl, $url);
-        }
-
         $this->url = Http::createFromString($url);
+
         $this->nbPages = $nbPages;
     }
 

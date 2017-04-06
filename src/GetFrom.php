@@ -7,14 +7,26 @@ use Lbc\Crawler\AdCrawler;
 use Lbc\Crawler\SearchResultCrawler;
 use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
+use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * Class GetFrom
+ * @package Lbc
+ */
 class GetFrom
 {
-    protected $httpClient;
+    /**
+     * @var Client
+     */
+    protected $client;
 
+    /**
+     * GetFrom constructor.
+     * @param Client|null $client
+     */
     public function __construct(Client $client = null)
     {
-        $this->httpClient = $client ?: new Client();
+        $this->client = $client ?: new Client();
     }
 
     /**
@@ -25,7 +37,7 @@ class GetFrom
      */
     public function getHttpClient()
     {
-        return $this->httpClient;
+        return $this->client;
     }
 
     /**
@@ -39,7 +51,8 @@ class GetFrom
     public function search($url, $detailedAd = false)
     {
         $searchData = new SearchResultCrawler(
-            (string) $this->httpClient->get($url)->getBody()
+            new Crawler((string) $this->client->get($url)->getBody()),
+            $url
         );
 
         $url = new SearchResultUrlParser($url, $searchData->getNbPages());
@@ -47,15 +60,15 @@ class GetFrom
         $ads = ($detailedAd) ? $searchData->getAds() : $searchData->getAdsId();
 
         $sumarize = [
-            'total_ads'   => $searchData->getNbAds(),
-            'total_page'  => $searchData->getNbPages(),
-            'ads_per_page'  => $searchData->getNbAdsPerPage(),
-            'category'    => $url->getCategory(),
-            'location'    => $url->getLocation(),
-            'search_area' => $url->getSearchArea(),
-            'sort_by'     => $url->getSortType(),
-            'type'        => $url->getType(),
-            'ads'         => $ads,
+            'total_ads'    => $searchData->getNbAds(),
+            'total_page'   => $searchData->getNbPages(),
+            'ads_per_page' => $searchData->getNbAdsPerPage(),
+            'category'     => $searchData->getUrlParser()->getCategory(),
+            'location'     => $searchData->getUrlParser()->getLocation(),
+            'search_area'  => $searchData->getUrlParser()->getSearchArea(),
+            'sort_by'      => $searchData->getUrlParser()->getSortType(),
+            'type'         => $searchData->getUrlParser()->getType(),
+            'ads'          => $ads,
         ];
 
         return array_merge($url->getNav(), $sumarize);
@@ -71,7 +84,7 @@ class GetFrom
      */
     private function adById($id, $category)
     {
-        return $this->ad("http://www.leboncoin.fr/{$category}/{$id}.htm");
+        return $this->ad("https://www.leboncoin.fr/{$category}/{$id}.htm");
     }
 
     /**
@@ -82,19 +95,11 @@ class GetFrom
      */
     private function adByUrl($url)
     {
-        $urlParser = new AdUrlParser($url);
+        $content = $this->client->get($url)->getBody()->getContents();
 
-        $adData = new AdCrawler(
-            (string) $this->httpClient->get($url)->getBody()
-        );
+        $adData = new AdCrawler(new Crawler(utf8_encode($content)), $url);
 
-        return array_merge(
-            [
-                'id' => $urlParser->getId(),
-                'category'=>$urlParser->getCategory()
-            ],
-            $adData->getAll()
-        );
+        return $adData->getAll();
     }
 
     /**
@@ -113,32 +118,5 @@ class GetFrom
         }
 
         throw new \InvalidArgumentException('Bad number of argument');
-    }
-
-    public function __call($method, $arguments)
-    {
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], $arguments);
-        }
-
-        throw new \BadMethodCallException();
-    }
-
-    /**
-     * Add a little bit of sugar
-     *
-     * @param $method
-     * @param $arguments
-     * @return mixed
-     */
-    public static function __callStatic($method, $arguments)
-    {
-        $instance = new self;
-
-        if (method_exists($instance, $method)) {
-            return call_user_func_array([$instance, $method], $arguments);
-        }
-
-        throw new \BadMethodCallException();
     }
 }
