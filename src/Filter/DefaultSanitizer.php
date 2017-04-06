@@ -2,7 +2,7 @@
 
 namespace Lbc\Filter;
 
-class DafaultSanitizer implements SanitizerInterface
+class DefaultSanitizer implements SanitizerInterface
 {
     public static function clean($value)
     {

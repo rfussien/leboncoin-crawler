@@ -2,7 +2,7 @@
 
 namespace Lbc\Crawler;
 
-use Lbc\Filter\DafaultSanitizer;
+use Lbc\Filter\DefaultSanitizer;
 use Lbc\Filter\PriceSanitizer;
 use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
@@ -41,7 +41,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
      */
     public function getTitle()
     {
-        return DafaultSanitizer::clean($this->node->filter('h2')->text());
+        return DefaultSanitizer::clean($this->node->filter('h2')->text());
     }
 
     /**

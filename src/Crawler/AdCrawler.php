@@ -2,8 +2,11 @@
 
 namespace Lbc\Crawler;
 
+use Lbc\Filter\CitySanitizer;
+use Lbc\Filter\CpSanitizer;
+use Lbc\Filter\DefaultSanitizer;
 use Lbc\Filter\KeySanitizer;
-use Lbc\Helper\Encoding;
+use Lbc\Filter\PriceSanitizer;
 use Lbc\Parser\AdUrlParser;
 use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
@@ -101,19 +104,19 @@ class AdCrawler extends CrawlerAbstract
 
         $properties = [];
 
-        $properties['title'] = static::parseValue($this->node->filter('h1')->text());
+        $properties['title'] = DefaultSanitizer::clean(
+            $this->node->filter('h1')->text()
+        );
 
         $node->filter('h2')
             ->each(function (Crawler $crawler) use (&$properties) {
-                $property = KeySanitizer::clean(
-                    $crawler->filter('.property')->text()
+                $properties = array_merge(
+                    $properties,
+                    $this->sanitize(
+                        $crawler->filter('.property')->text(),
+                        $crawler->filter('.value')->text()
+                    )
                 );
-
-                $value = static::parseValue(
-                    $crawler->filter('.value')->text()
-                );
-
-                $properties[$property] = $value;
             });
 
         return ['properties' => $properties];
@@ -136,23 +139,22 @@ class AdCrawler extends CrawlerAbstract
      * @param string $value
      * @return string
      */
-    protected static function parseProperty($value)
+    private function sanitize($key, $value)
     {
-        return preg_replace(
-            '/\s/',
-            '_',
-            trim(strtolower(Encoding::toAscii($value)))
-        );
-    }
+        $key = KeySanitizer::clean($key);
 
-    /**
-     * Clean the data
-     *
-     * @param string $value
-     * @return string
-     */
-    protected static function parseValue($value)
-    {
-        return trim(preg_replace("/[\n]+/", ' ', $value));
+        switch ($key) {
+            case 'prix':
+                return ['price' => PriceSanitizer::clean($value)];
+                break;
+            case 'ville':
+                return [
+                    'city' => CitySanitizer::clean($value),
+                    'cp'   => CpSanitizer::clean($value),
+                ];
+                break;
+            default:
+                return [$key => DefaultSanitizer::clean($value)];
+        }
     }
 }

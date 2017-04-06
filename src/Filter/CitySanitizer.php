@@ -6,6 +6,6 @@ class CitySanitizer implements SanitizerInterface
 {
     public static function clean($value)
     {
-        // TODO: Implement clean() method.
+        return DefaultSanitizer::clean(preg_replace('/[0-9]/', '', $value));
     }
 }

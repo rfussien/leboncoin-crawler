@@ -184,12 +184,4 @@ class SearchResultUrlParser
 
         return 'date';
     }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->url;
-    }
 }

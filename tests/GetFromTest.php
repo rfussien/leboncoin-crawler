@@ -115,21 +115,4 @@ class GetFromTest extends TestCase
         $getFrom = new GetFrom();
         $getFrom->ad(1, 2, 3);
     }
-
-    /**
-     * @expectedException BadMethodCallException
-     */
-    public function testAnExceptionIsThrownWhenBadMethodAreCalled()
-    {
-        $getFrom = new GetFrom();
-        $getFrom->thisMethodCertainlyDoesntExists();
-    }
-
-    /**
-     * @expectedException BadMethodCallException
-     */
-    public function testAnExceptionIsThrownWhenBadStaticMethodAreCalled()
-    {
-        GetFrom::thisMethodCertainlyDoesntExists();
-    }
 }

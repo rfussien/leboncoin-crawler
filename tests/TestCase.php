@@ -26,8 +26,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             ],
             'properties'    => [
                 'title'          => 'Maison 11 pièces 450 m²',
-                'prix'           => '1 185 000 €',
-                'ville'          => 'Bayeux 14400',
+                'price'          => 1185000,
+                'city'           => 'Bayeux',
+                'cp'             => '14400',
                 'type_de_bien'   => 'Maison',
                 'pieces'         => '11',
                 'surface'        => '450 m2',
@@ -59,7 +60,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     protected $searchData = [
         'file' => __DIR__ . '/content/search_result.html',
         'url'  =>
-            'https://www.leboncoin.fr/voitures/offres/basse_normandie/'.
+            'https://www.leboncoin.fr/voitures/offres/basse_normandie/' .
             '?o=2&ms=30000&me=100000&fu=2&gb=2&location=Caen%2014000',
     ];
 

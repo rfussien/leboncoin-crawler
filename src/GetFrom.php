@@ -119,36 +119,4 @@ class GetFrom
 
         throw new \InvalidArgumentException('Bad number of argument');
     }
-
-    /**
-     * @param $method
-     * @param $arguments
-     * @return mixed
-     */
-    public function __call($method, $arguments)
-    {
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], $arguments);
-        }
-
-        throw new \BadMethodCallException();
-    }
-
-    /**
-     * Add a little bit of sugar
-     *
-     * @param $method
-     * @param $arguments
-     * @return mixed
-     */
-    public static function __callStatic($method, $arguments)
-    {
-        $instance = new self;
-
-        if (method_exists($instance, $method)) {
-            return call_user_func_array([$instance, $method], $arguments);
-        }
-
-        throw new \BadMethodCallException();
-    }
 }
