@@ -11,9 +11,6 @@ class SearchResultAdCrawlerTest extends TestCase
 
     public function setUp()
     {
-        /**
-         * https://www.leboncoin.fr/voitures/1110535422.htm?ca=4_s
-         */
         $this->adContent = file_get_contents(dirname(__DIR__) . '/content/search_result.html');
     }
 
@@ -21,8 +18,10 @@ class SearchResultAdCrawlerTest extends TestCase
     {
         $node = (new Crawler($this->adContent))->filter('[itemtype="http://schema.org/Offer"]')->first();
 
-        $search = new SearchResultAdCrawler($node,
-            $node->filter('a')->attr('href'));
+        $search = new SearchResultAdCrawler(
+            $node,
+            $node->filter('a')->attr('href')
+        );
 
         $expected = (object)[
             'id'            => '1110535422',
