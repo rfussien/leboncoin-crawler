@@ -6,8 +6,6 @@ use Lbc\Filter\CitySanitizer;
 use Lbc\Filter\CpSanitizer;
 use Lbc\Filter\DefaultSanitizer;
 use Lbc\Filter\KeySanitizer;
-use Lbc\Filter\KilometrageSanitizer;
-use Lbc\Filter\PriceSanitizer;
 use Lbc\Parser\AdUrlParser;
 use League\Uri\Schemes\Http;
 use Symfony\Component\DomCrawler\Crawler;
