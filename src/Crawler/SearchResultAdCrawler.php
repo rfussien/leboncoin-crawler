@@ -16,6 +16,11 @@ use Symfony\Component\DomCrawler\Crawler;
 class SearchResultAdCrawler extends CrawlerAbstract
 {
     /**
+     * @var AdUrlParser
+     */
+    protected $url;
+
+    /**
      * @param $url
      * @return SearchResultUrlParser
      */

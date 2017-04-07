@@ -11,6 +11,11 @@ use Lbc\Parser\SearchResultUrlParser;
 class SearchResultCrawler extends CrawlerAbstract
 {
     /**
+     * @var SearchResultUrlParser
+     */
+    protected $url;
+
+    /**
      * @param $url
      * @return SearchResultUrlParser
      */

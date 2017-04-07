@@ -21,11 +21,6 @@ abstract class CrawlerAbstract
     protected $node;
 
     /**
-     * @var
-     */
-    protected $url;
-
-    /**
      * CrawlerAbstract constructor.
      * @param Crawler $node
      * @param $url

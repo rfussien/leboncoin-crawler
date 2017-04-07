@@ -17,6 +17,11 @@ use Symfony\Component\DomCrawler\Crawler;
 class AdCrawler extends CrawlerAbstract
 {
     /**
+     * @var AdUrlParser
+     */
+    protected $url;
+
+    /**
      * @param $url
      * @return AdUrlParser
      */
@@ -129,8 +134,10 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getDescription(Crawler $node = null)
     {
+        $node = $node ?: $this->node;
+
         return [
-            'description' => $this->node
+            'description' => $node
                 ->filter("p[itemprop=description]")
                 ->text()
         ];
