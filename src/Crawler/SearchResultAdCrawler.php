@@ -62,6 +62,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
                 $this->node->filter('*[itemprop=price]')->text()
             );
         }
+
         return 0;
     }
 
@@ -166,15 +167,15 @@ class SearchResultAdCrawler extends CrawlerAbstract
     public function getAll()
     {
         return (object)[
-            'id'         => $this->getId(),
-            'title'      => $this->getTitle(),
-            'price'      => $this->getPrice(),
-            'url'        => $this->getUrl(),
-            'created_at' => $this->getCreatedAt(),
-            'thumb'      => $this->getThumb(),
-            'nb_image'   => $this->getNbImage(),
-            'placement'  => $this->getPlacement(),
-            'type'       => $this->getType(),
+            'id'            => $this->getId(),
+            'titre'         => $this->getTitle(),
+            'prix'          => $this->getPrice(),
+            'url'           => $this->getUrl(),
+            'created_at'    => $this->getCreatedAt(),
+            'images_thumbs' => $this->getThumb(),
+            'nb_image'      => $this->getNbImage(),
+            'placement'     => $this->getPlacement(),
+            'type'          => $this->getType(),
         ];
     }
 

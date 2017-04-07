@@ -2,7 +2,6 @@
 
 namespace Lbc;
 
-use BadMethodCallException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -55,15 +54,15 @@ class GetFromTest extends TestCase
         $data = $getFrom->search($this->searchData['url'], true);
 
         $expected = (object)[
-            'id'         => '1094424477',
-            'title'      => 'BMW 118dA Sport Line Toit ouvrant',
-            'price'      => 21890,
-            'url'        => 'https://www.leboncoin.fr/voitures/1094424477.htm',
-            'created_at' => '2017-02-17 15:51',
-            'thumb'      => 'https://img3.leboncoin.fr/ad-thumb/2b01dcbc684ff4f619e7733bbcbf14d2d71d77c3.jpg',
-            'nb_image'   => 5,
-            'placement'  => 'Caen / Calvados',
-            'type'       => 'pro',
+            'id'            => '1094424477',
+            'titre'         => 'BMW 118dA Sport Line Toit ouvrant',
+            'prix'          => 21890,
+            'url'           => 'https://www.leboncoin.fr/voitures/1094424477.htm',
+            'created_at'    => '2017-02-17 15:51',
+            'images_thumbs' => 'https://img3.leboncoin.fr/ad-thumb/2b01dcbc684ff4f619e7733bbcbf14d2d71d77c3.jpg',
+            'nb_image'      => 5,
+            'placement'     => 'Caen / Calvados',
+            'type'          => 'pro',
         ];
 
         $this->assertEquals($expected, array_pop($data['ads']));
