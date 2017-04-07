@@ -141,7 +141,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
             $this->node->filter('.ispro'),
             false,
             function ($value) {
-                return true;
+                return true || $value;
             }
         );
     }
