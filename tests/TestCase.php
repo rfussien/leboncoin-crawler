@@ -70,4 +70,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         'file' => __DIR__ . '/content/search_result2.html',
         'url'  => 'https://www.leboncoin.fr/telephonie/offres/basse_normandie/?f=a&th=1&q=iphone',
     ];
+
+    protected $searchEmpty = [
+        'file' => __DIR__ . '/content/empty_search.html',
+        'url'  => 'https://www.leboncoin.fr/annonces/offres/basse_normandie/?th=1&q=dlkjflskdjcl%2Cisu&it=1',
+    ];
 }

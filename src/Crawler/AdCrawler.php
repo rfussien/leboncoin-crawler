@@ -141,9 +141,10 @@ class AdCrawler extends CrawlerAbstract
         $node = $node ?: $this->node;
 
         return [
-            'description' => $node
-                ->filter("p[itemprop=description]")
-                ->text()
+            'description' => $this->getFieldValue(
+                $node->filter("p[itemprop=description]"),
+                null
+            )
         ];
     }
 

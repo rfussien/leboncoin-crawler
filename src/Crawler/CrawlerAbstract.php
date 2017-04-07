@@ -2,6 +2,8 @@
 
 namespace Lbc\Crawler;
 
+use function foo\func;
+use Lbc\Filter\DefaultSanitizer;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -53,6 +55,37 @@ abstract class CrawlerAbstract
     public function getUrlParser()
     {
         return $this->url;
+    }
+
+    /**
+     * Return the field's value
+     *
+     * @param Crawler $node
+     * @param mixed $defaultValue
+     * @param \Closure $callback
+     * @param string $funcName
+     * @param string $funcParam
+     *
+     * @return mixed
+     */
+    protected function getFieldValue(
+        Crawler $node,
+        $defaultValue,
+        $callback = null,
+        $funcName = 'text',
+        $funcParam = ''
+    ) {
+        if ($callback == null) {
+            $callback = function ($value) {
+                return DefaultSanitizer::clean($value);
+            };
+        }
+
+        if ($node->count()) {
+            return $callback($node->$funcName($funcParam));
+        }
+
+        return $defaultValue;
     }
 
     /**

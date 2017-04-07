@@ -47,7 +47,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
      */
     public function getTitle()
     {
-        return DefaultSanitizer::clean($this->node->filter('h2')->text());
+        return $this->getFieldValue($this->node->filter('h2'), '');
     }
 
     /**
@@ -57,13 +57,11 @@ class SearchResultAdCrawler extends CrawlerAbstract
      */
     public function getPrice()
     {
-        if ($this->node->filter('*[itemprop=price]')->count()) {
-            return PrixSanitizer::clean(
-                $this->node->filter('*[itemprop=price]')->text()
-            );
-        }
-
-        return 0;
+        return $this->getFieldValue(
+            $this->node->filter('*[itemprop=price]'),
+            0,
+            PrixSanitizer::class . '::clean'
+        );
     }
 
     /**
@@ -119,9 +117,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
     {
         $node = $this->node->filter('.item_imageNumber');
 
-        return $this->getFieldValue($node, 0, function ($value) {
-            return (int)trim($value);
-        });
+        return $this->getFieldValue($node, 0);
     }
 
     /**
@@ -168,30 +164,5 @@ class SearchResultAdCrawler extends CrawlerAbstract
             'placement'     => $this->getPlacement(),
             'type'          => $this->getType(),
         ];
-    }
-
-    /**
-     * Return the field's value
-     *
-     * @param Crawler $node
-     * @param mixed $defaultValue
-     * @param \Closure $callback
-     * @param string $funcName
-     * @param string $funcParam
-     *
-     * @return mixed
-     */
-    private function getFieldValue(
-        Crawler $node,
-        $defaultValue,
-        $callback,
-        $funcName = 'text',
-        $funcParam = ''
-    ) {
-        if ($node->count()) {
-            return $callback($node->$funcName($funcParam));
-        }
-
-        return $defaultValue;
     }
 }

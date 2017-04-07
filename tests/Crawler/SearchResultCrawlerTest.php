@@ -9,15 +9,15 @@ class SearchResultCrawlerTest extends TestCase
 {
     protected $searchContent;
     protected $searchContent2;
+    protected $searchEmptyContent;
 
     public function setUp()
     {
         $this->searchContent = file_get_contents($this->searchData['file']);
 
-        /**
-         * https://www.leboncoin.fr/telephonie/offres/basse_normandie/?f=a&th=1&q=iphone
-         */
         $this->searchContent2 = file_get_contents($this->searchData2['file']);
+
+        $this->searchEmptyContent = file_get_contents($this->searchEmpty['file']);
     }
 
     public function testIVeGotSomeOfflineContent()
@@ -112,5 +112,39 @@ class SearchResultCrawlerTest extends TestCase
         );
 
         $this->assertCount(35, $search->getAds());
+    }
+
+    public function testEmptySearch()
+    {
+        $search = new SearchResultCrawler(
+            new Crawler($this->searchEmptyContent),
+            $this->searchEmpty['url']
+        );
+
+        $extected = [
+            'total_ads'    => 0,
+            'total_page'   => 0,
+            'ads_per_page' => 35,
+            'category'     => null,
+            'location'     => null,
+            'search_area'  => 'basse_normandie',
+            'sort_by'      => 'date',
+            'type'         => 'all',
+            'ads'          => [],
+        ];
+
+        $result = [
+            'total_ads'    => $search->getNbAds(),
+            'total_page'   => $search->getNbPages(),
+            'ads_per_page' => $search->getNbAdsPerPage(),
+            'category'     => $search->getUrlParser()->getCategory(),
+            'location'     => $search->getUrlParser()->getLocation(),
+            'search_area'  => $search->getUrlParser()->getSearchArea(),
+            'sort_by'      => $search->getUrlParser()->getSortType(),
+            'type'         => $search->getUrlParser()->getType(),
+            'ads'          => $search->getAdsId(),
+        ];
+
+        $this->assertEquals($extected, $result);
     }
 }
