@@ -37,4 +37,24 @@ class SearchResultAdCrawlerTest extends TestCase
 
         $this->assertEquals($expected, $search->getAll());
     }
+
+    public function testNoThumbReturnNull()
+    {
+        $search = new SearchResultAdCrawler(
+            new Crawler,
+            'https://www.leboncoin.fr/voitures/1110535422.htm'
+        );
+
+        $this->assertEquals(null, $search->getThumb());
+    }
+
+    public function testTheDefaultValueIsReturned()
+    {
+        $search = new SearchResultAdCrawler(
+            new Crawler,
+            'https://www.leboncoin.fr/voitures/1110535422.htm'
+        );
+
+        $this->assertEquals(0, $search->getNbImage());
+    }
 }
