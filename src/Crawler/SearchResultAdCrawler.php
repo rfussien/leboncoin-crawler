@@ -4,6 +4,7 @@ namespace Lbc\Crawler;
 
 use Lbc\Filter\DefaultSanitizer;
 use Lbc\Filter\PriceSanitizer;
+use Lbc\Filter\PrixSanitizer;
 use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
 use League\Uri\Schemes\Http;
@@ -53,7 +54,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
     public function getPrice()
     {
         if ($this->node->filter('*[itemprop=price]')->count()) {
-            return PriceSanitizer::clean(
+            return PrixSanitizer::clean(
                 $this->node->filter('*[itemprop=price]')->text()
             );
         }

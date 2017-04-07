@@ -6,6 +6,7 @@ use Lbc\Filter\CitySanitizer;
 use Lbc\Filter\CpSanitizer;
 use Lbc\Filter\DefaultSanitizer;
 use Lbc\Filter\KeySanitizer;
+use Lbc\Filter\KilometrageSanitizer;
 use Lbc\Filter\PriceSanitizer;
 use Lbc\Parser\AdUrlParser;
 use League\Uri\Schemes\Http;
@@ -102,11 +103,11 @@ class AdCrawler extends CrawlerAbstract
     {
         $node = $node ?: $this->node;
 
-        $properties = [];
-
-        $properties['title'] = DefaultSanitizer::clean(
-            $this->node->filter('h1')->text()
-        );
+        $properties = [
+            'titre' => DefaultSanitizer::clean(
+                $this->node->filter('h1')->text()
+            )
+        ];
 
         $node->filter('h2')
             ->each(function (Crawler $crawler) use (&$properties) {
@@ -130,11 +131,16 @@ class AdCrawler extends CrawlerAbstract
      */
     public function getDescription(Crawler $node = null)
     {
-        return ['description' => $this->node->filter("p#description")->text()];
+        return [
+            'description' => $this->node
+                ->filter("p[itemprop=description]")
+                ->text()
+        ];
     }
 
     /**
-     * Transform the properties name into a snake_case string
+     * Transform the properties name into a snake_case string and sanitize
+     * the value
      *
      * @param string $key
      * @param string $value
@@ -144,18 +150,19 @@ class AdCrawler extends CrawlerAbstract
     {
         $key = KeySanitizer::clean($key);
 
-        switch ($key) {
-            case 'prix':
-                return ['price' => PriceSanitizer::clean($value)];
-                break;
-            case 'ville':
-                return [
-                    'city' => CitySanitizer::clean($value),
-                    'cp'   => CpSanitizer::clean($value),
-                ];
-                break;
-            default:
-                return [$key => DefaultSanitizer::clean($value)];
+        if ($key == 'ville') {
+            return [
+                'ville' => CitySanitizer::clean($value),
+                'cp'    => CpSanitizer::clean($value),
+            ];
         }
+
+        $filterName = 'Lbc\\Filter\\' . ucfirst($key) . 'Sanitizer';
+
+        if (!class_exists($filterName)) {
+            $filterName = 'Lbc\\Filter\\DefaultSanitizer';
+        }
+
+        return [$key => call_user_func("$filterName::clean", $value)];
     }
 }
