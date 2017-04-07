@@ -60,7 +60,7 @@ class AdCrawler extends CrawlerAbstract
 
         $images = [
             'images_thumbs' => [],
-            'images' => [],
+            'images'        => [],
         ];
 
         $node
@@ -106,9 +106,14 @@ class AdCrawler extends CrawlerAbstract
         $node = $node ?: $this->node;
 
         $properties = [
-            'titre' => DefaultSanitizer::clean(
-                $this->node->filter('h1')->text()
-            )
+            'titre'      => DefaultSanitizer::clean(
+                $node->filter('h1')->text()
+            ),
+            'created_at' => $node
+                ->filter('*[itemprop=availabilityStarts]')
+                ->first()
+                ->attr('content'),
+            'is_pro' => ($node->filter('.ispro')->count()),
         ];
 
         $node->filter('h2')

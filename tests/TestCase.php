@@ -26,6 +26,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             ],
             'properties'    => [
                 'titre'          => 'Maison 11 pièces 450 m²',
+                'is_pro'         => true,
+                'created_at'     => '2017-02-18',
                 'prix'           => 1185000,
                 'ville'          => 'Bayeux',
                 'cp'             => '14400',

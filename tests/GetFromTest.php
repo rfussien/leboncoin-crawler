@@ -58,7 +58,7 @@ class GetFromTest extends TestCase
             'titre'         => 'BMW 118dA Sport Line Toit ouvrant',
             'prix'          => 21890,
             'url'           => 'https://www.leboncoin.fr/voitures/1094424477.htm',
-            'created_at'    => '2017-02-17 15:51',
+            'created_at'    => '2017-02-17',
             'images_thumbs' => 'https://img3.leboncoin.fr/ad-thumb/2b01dcbc684ff4f619e7733bbcbf14d2d71d77c3.jpg',
             'nb_image'      => 5,
             'placement'     => 'Caen / Calvados',
