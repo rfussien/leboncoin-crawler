@@ -34,10 +34,11 @@ class SearchResultAdCrawler extends CrawlerAbstract
         return $this->url->getId();
     }
 
+
     /**
      * Return the title
      *
-     * @return mixed
+     * @return string
      */
     public function getTitle()
     {
@@ -175,9 +176,9 @@ class SearchResultAdCrawler extends CrawlerAbstract
     /**
      * Return the field's value
      *
-     * @param $node
-     * @param $defaultValue
-     * @param $callback
+     * @param Crawler $node
+     * @param mixed $defaultValue
+     * @param \Closure $callback
      * @param string $funcName
      * @param string $funcParam
      *
