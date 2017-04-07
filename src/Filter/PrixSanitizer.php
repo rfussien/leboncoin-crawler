@@ -2,7 +2,7 @@
 
 namespace Lbc\Filter;
 
-class PriceSanitizer implements SanitizerInterface
+class PrixSanitizer implements SanitizerInterface
 {
     public static function clean($value)
     {

@@ -25,13 +25,15 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
                 '4' => 'https://img5.leboncoin.fr/ad-image/d34a4ef9545e60ae88169acbe4858608ba01e8a9.jpg',
             ],
             'properties'    => [
-                'title'          => 'Maison 11 pièces 450 m²',
-                'price'          => 1185000,
-                'city'           => 'Bayeux',
+                'titre'          => 'Maison 11 pièces 450 m²',
+                'is_pro'         => true,
+                'created_at'     => '2017-02-18',
+                'prix'           => 1185000,
+                'ville'          => 'Bayeux',
                 'cp'             => '14400',
                 'type_de_bien'   => 'Maison',
-                'pieces'         => '11',
-                'surface'        => '450 m2',
+                'pieces'         => 11,
+                'surface'        => 450,
                 'reference'      => '394348',
                 'ges'            => 'C (de 11 à 20)',
                 'classe_energie' => 'C (de 91 à 150)',
@@ -67,5 +69,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     protected $searchData2 = [
         'file' => __DIR__ . '/content/search_result2.html',
         'url'  => 'https://www.leboncoin.fr/telephonie/offres/basse_normandie/?f=a&th=1&q=iphone',
+    ];
+
+    protected $searchEmpty = [
+        'file' => __DIR__ . '/content/empty_search.html',
+        'url'  => 'https://www.leboncoin.fr/annonces/offres/basse_normandie/?th=1&q=dlkjflskdjcl%2Cisu&it=1',
     ];
 }

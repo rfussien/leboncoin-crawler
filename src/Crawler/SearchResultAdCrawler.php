@@ -2,12 +2,10 @@
 
 namespace Lbc\Crawler;
 
-use Lbc\Filter\DefaultSanitizer;
-use Lbc\Filter\PriceSanitizer;
+use Lbc\Filter\PrixSanitizer;
 use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
 use League\Uri\Schemes\Http;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class SearchResultAdCrawler
@@ -15,6 +13,11 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class SearchResultAdCrawler extends CrawlerAbstract
 {
+    /**
+     * @var AdUrlParser
+     */
+    protected $url;
+
     /**
      * @param $url
      * @return SearchResultUrlParser
@@ -34,14 +37,15 @@ class SearchResultAdCrawler extends CrawlerAbstract
         return $this->url->getId();
     }
 
+
     /**
      * Return the title
      *
-     * @return mixed
+     * @return string
      */
     public function getTitle()
     {
-        return DefaultSanitizer::clean($this->node->filter('h2')->text());
+        return $this->getFieldValue($this->node->filter('h2'), '');
     }
 
     /**
@@ -51,12 +55,13 @@ class SearchResultAdCrawler extends CrawlerAbstract
      */
     public function getPrice()
     {
-        if ($this->node->filter('*[itemprop=price]')->count()) {
-            return PriceSanitizer::clean(
-                $this->node->filter('*[itemprop=price]')->text()
-            );
-        }
-        return 0;
+        return $this->getFieldValue(
+            $this->node->filter('*[itemprop=price]'),
+            0,
+            function ($value) {
+                return PrixSanitizer::clean($value);
+            }
+        );
     }
 
     /**
@@ -76,19 +81,10 @@ class SearchResultAdCrawler extends CrawlerAbstract
      */
     public function getCreatedAt()
     {
-        $node = $this->node
+        return $this->node
             ->filter('*[itemprop=availabilityStarts]')
-            ->first();
-
-        $date = $node->attr('content');
-
-        $time = $this->getFieldValue($node, 0, function ($value) {
-            $value = trim($value);
-
-            return substr($value, strpos($value, ',') + 2);
-        });
-
-        return $date . ' ' . $time;
+            ->first()
+            ->attr('content');
     }
 
     /**
@@ -121,9 +117,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
     {
         $node = $this->node->filter('.item_imageNumber');
 
-        return $this->getFieldValue($node, 0, function ($value) {
-            return (int)trim($value);
-        });
+        return $this->getFieldValue($node, 0);
     }
 
     /**
@@ -141,59 +135,32 @@ class SearchResultAdCrawler extends CrawlerAbstract
     /**
      * @return mixed
      */
-    public function getType()
+    public function getIsPro()
     {
-        $node = $this->node->filter('*[itemprop=category]');
-
-        return $this->getFieldValue($node, false, function ($value) {
-            if ('pro' === preg_replace('/[\s()]+/', '', $value)) {
-                return 'pro';
+        return $this->getFieldValue(
+            $this->node->filter('.ispro'),
+            false,
+            function ($value) {
+                return true || $value;
             }
-
-            return 'part';
-        });
+        );
     }
 
     /**
-     * @return object
+     * @return array
      */
     public function getAll()
     {
-        return (object)[
-            'id'         => $this->getId(),
-            'title'      => $this->getTitle(),
-            'price'      => $this->getPrice(),
-            'url'        => $this->getUrl(),
-            'created_at' => $this->getCreatedAt(),
-            'thumb'      => $this->getThumb(),
-            'nb_image'   => $this->getNbImage(),
-            'placement'  => $this->getPlacement(),
-            'type'       => $this->getType(),
+        return [
+            'id'            => $this->getId(),
+            'titre'         => $this->getTitle(),
+            'is_pro'        => $this->getIsPro(),
+            'prix'          => $this->getPrice(),
+            'url'           => $this->getUrl(),
+            'created_at'    => $this->getCreatedAt(),
+            'images_thumbs' => $this->getThumb(),
+            'nb_image'      => $this->getNbImage(),
+            'placement'     => $this->getPlacement(),
         ];
-    }
-
-    /**
-     * Return the field's value
-     *
-     * @param $node
-     * @param $defaultValue
-     * @param $callback
-     * @param string $funcName
-     * @param string $funcParam
-     *
-     * @return mixed
-     */
-    private function getFieldValue(
-        Crawler $node,
-        $defaultValue,
-        $callback,
-        $funcName = 'text',
-        $funcParam = ''
-    ) {
-        if ($node->count()) {
-            return $callback($node->$funcName($funcParam));
-        }
-
-        return $defaultValue;
     }
 }

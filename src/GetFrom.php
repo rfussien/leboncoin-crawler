@@ -5,7 +5,6 @@ namespace Lbc;
 use GuzzleHttp\Client;
 use Lbc\Crawler\AdCrawler;
 use Lbc\Crawler\SearchResultCrawler;
-use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
 use Symfony\Component\DomCrawler\Crawler;
 

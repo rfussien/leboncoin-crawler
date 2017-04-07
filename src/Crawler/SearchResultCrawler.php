@@ -11,6 +11,11 @@ use Lbc\Parser\SearchResultUrlParser;
 class SearchResultCrawler extends CrawlerAbstract
 {
     /**
+     * @var SearchResultUrlParser
+     */
+    protected $url;
+
+    /**
      * @param $url
      * @return SearchResultUrlParser
      */
@@ -78,7 +83,7 @@ class SearchResultCrawler extends CrawlerAbstract
                     $node->filter('a')->attr('href')
                 ))->getAll();
 
-                $ads [$ad->id] = $ad;
+                $ads [$ad['id']] = $ad;
             });
 
         return $ads;
