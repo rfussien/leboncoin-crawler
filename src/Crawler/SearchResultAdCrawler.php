@@ -147,11 +147,11 @@ class SearchResultAdCrawler extends CrawlerAbstract
     }
 
     /**
-     * @return object
+     * @return array
      */
     public function getAll()
     {
-        return (object)[
+        return [
             'id'            => $this->getId(),
             'titre'         => $this->getTitle(),
             'is_pro'        => $this->getIsPro(),

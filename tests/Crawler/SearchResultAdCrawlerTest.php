@@ -23,7 +23,7 @@ class SearchResultAdCrawlerTest extends TestCase
             $node->filter('a')->attr('href')
         );
 
-        $expected = (object)[
+        $expected = [
             'id'            => '1110535422',
             'titre'         => 'BMW x6 3.0d 235cv Xdrive pack exclusive',
             'is_pro'        => false,

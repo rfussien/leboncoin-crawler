@@ -53,7 +53,7 @@ class GetFromTest extends TestCase
 
         $data = $getFrom->search($this->searchData['url'], true);
 
-        $expected = (object)[
+        $expected = [
             'id'            => '1094424477',
             'titre'         => 'BMW 118dA Sport Line Toit ouvrant',
             'is_pro'        => true,

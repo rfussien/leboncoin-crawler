@@ -83,7 +83,7 @@ class SearchResultCrawler extends CrawlerAbstract
                     $node->filter('a')->attr('href')
                 ))->getAll();
 
-                $ads [$ad->id] = $ad;
+                $ads [$ad['id']] = $ad;
             });
 
         return $ads;
