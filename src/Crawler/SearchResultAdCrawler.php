@@ -3,7 +3,6 @@
 namespace Lbc\Crawler;
 
 use Lbc\Filter\DefaultSanitizer;
-use Lbc\Filter\PriceSanitizer;
 use Lbc\Filter\PrixSanitizer;
 use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
