@@ -11,6 +11,11 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class CrawlerAbstract
 {
     /**
+     * @var
+     */
+    protected $url;
+
+    /**
      * @var string
      */
     protected $sheme = 'https';
