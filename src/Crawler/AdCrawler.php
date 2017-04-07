@@ -58,12 +58,14 @@ class AdCrawler extends CrawlerAbstract
     {
         $node = $node ?: $this->node;
 
-        $images = [];
-        $images_thumbs = [];
+        $images = [
+            'images_thumbs' => [],
+            'images' => [],
+        ];
 
         $node
             ->filter('.adview_main script')
-            ->each(function (Crawler $crawler) use (&$images, &$images_thumbs) {
+            ->each(function (Crawler $crawler) use (&$images) {
                 if (preg_match_all(
                     '#//img.+.leboncoin.fr/.*\.jpg#',
                     $crawler->html(),
@@ -72,7 +74,7 @@ class AdCrawler extends CrawlerAbstract
                     foreach ($matches[0] as $image) {
                         if (preg_match('/thumb/', $image)) {
                             array_push(
-                                $images_thumbs,
+                                $images['images_thumbs'],
                                 (string)Http::createFromString($image)
                                     ->withScheme($this->sheme)
                             );
@@ -81,7 +83,7 @@ class AdCrawler extends CrawlerAbstract
                         }
 
                         array_push(
-                            $images,
+                            $images['images'],
                             (string)Http::createFromString($image)
                                 ->withScheme($this->sheme)
                         );
@@ -89,10 +91,7 @@ class AdCrawler extends CrawlerAbstract
                 }
             });
 
-        return [
-            'images'        => $images,
-            'images_thumbs' => $images_thumbs,
-        ];
+        return $images;
     }
 
     /**
