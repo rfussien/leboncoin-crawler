@@ -2,12 +2,10 @@
 
 namespace Lbc\Crawler;
 
-use Lbc\Filter\DefaultSanitizer;
 use Lbc\Filter\PrixSanitizer;
 use Lbc\Parser\AdUrlParser;
 use Lbc\Parser\SearchResultUrlParser;
 use League\Uri\Schemes\Http;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class SearchResultAdCrawler
@@ -137,17 +135,15 @@ class SearchResultAdCrawler extends CrawlerAbstract
     /**
      * @return mixed
      */
-    public function getType()
+    public function getIsPro()
     {
-        $node = $this->node->filter('*[itemprop=category]');
-
-        return $this->getFieldValue($node, false, function ($value) {
-            if ('pro' === preg_replace('/[\s()]+/', '', $value)) {
-                return 'pro';
+        return $this->getFieldValue(
+            $this->node->filter('.ispro'),
+            false,
+            function ($value) {
+                return true;
             }
-
-            return 'part';
-        });
+        );
     }
 
     /**
@@ -158,13 +154,13 @@ class SearchResultAdCrawler extends CrawlerAbstract
         return (object)[
             'id'            => $this->getId(),
             'titre'         => $this->getTitle(),
+            'is_pro'        => $this->getIsPro(),
             'prix'          => $this->getPrice(),
             'url'           => $this->getUrl(),
             'created_at'    => $this->getCreatedAt(),
             'images_thumbs' => $this->getThumb(),
             'nb_image'      => $this->getNbImage(),
             'placement'     => $this->getPlacement(),
-            'type'          => $this->getType(),
         ];
     }
 }

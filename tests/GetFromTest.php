@@ -56,13 +56,13 @@ class GetFromTest extends TestCase
         $expected = (object)[
             'id'            => '1094424477',
             'titre'         => 'BMW 118dA Sport Line Toit ouvrant',
+            'is_pro'        => true,
             'prix'          => 21890,
             'url'           => 'https://www.leboncoin.fr/voitures/1094424477.htm',
             'created_at'    => '2017-02-17',
             'images_thumbs' => 'https://img3.leboncoin.fr/ad-thumb/2b01dcbc684ff4f619e7733bbcbf14d2d71d77c3.jpg',
             'nb_image'      => 5,
             'placement'     => 'Caen / Calvados',
-            'type'          => 'pro',
         ];
 
         $this->assertEquals($expected, array_pop($data['ads']));
