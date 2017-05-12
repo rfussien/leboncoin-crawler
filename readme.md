@@ -41,7 +41,7 @@ an api, who knows...).
 
 ## Requirements
 
-- PHP 5.6 | 7 | 7.1, HHVM
+- PHP 7 | 7.1
 - [optional] PHPUnit to execute the test suite
 
 ## Install
