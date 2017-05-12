@@ -2,7 +2,9 @@
 
 namespace Lbc;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+
+abstract class TestCase extends PHPUnitTestCase
 {
     protected $adData = [
         'file' => __DIR__ . '/content/ad_1072097995.html',

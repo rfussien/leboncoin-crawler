@@ -62,7 +62,7 @@ class SearchResultUrlParserTest extends TestCase
             'https://www.leboncoin.fr/voitures/offres/basse_normandie/'
         );
 
-        $this->isNull($urlParser->previous());
+        $this->assertNull($urlParser->previous());
     }
 
     public function testThereIsNoNextPageAfterTheLastOne()
@@ -72,7 +72,7 @@ class SearchResultUrlParserTest extends TestCase
             3
         );
 
-        $this->isNull($urlParser->next());
+        $this->assertNull($urlParser->next());
     }
 
     public function testTheNavReturnsWhatItShould()
@@ -125,7 +125,7 @@ class SearchResultUrlParserTest extends TestCase
             'https://www.leboncoin.fr/annonces/offres/basse_normandie/'
         );
 
-        $this->isNull($urlParser->getCategory());
+        $this->assertNull($urlParser->getCategory());
     }
 
     public function testItReturnTheCorrectSearchArea()
@@ -144,7 +144,7 @@ class SearchResultUrlParserTest extends TestCase
     {
         $urlParser = new SearchResultUrlParser('voitures/offres/basse_normandie/');
 
-        $this->isNull($urlParser->getLocation());
+        $this->assertNull($urlParser->getLocation());
     }
 
     public function testItReturnTheCorrectLocation()
