@@ -4,7 +4,7 @@ namespace Lbc\Filter;
 
 class DefaultSanitizer implements SanitizerInterface
 {
-    public static function clean($value)
+    public function clean($value)
     {
         return trim(preg_replace("/[\n]+/", ' ', $value));
     }

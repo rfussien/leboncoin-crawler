@@ -10,7 +10,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             2012,
-            AnneemodeleSanitizer::clean("\n\n                  2012\n\n\n")
+            (new AnneemodeleSanitizer)->clean("\n\n                  2012\n\n\n")
         );
     }
 
@@ -18,7 +18,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             "Saint-Martin-d'Aubigny",
-            CitySanitizer::clean("\nSaint-Martin-d'Aubigny 50190\n")
+            (new CitySanitizer)->clean("\nSaint-Martin-d'Aubigny 50190\n")
         );
     }
 
@@ -26,7 +26,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             '14400',
-            CpSanitizer::clean("\nBayeux 14400\n")
+            (new CpSanitizer)->clean("\nBayeux 14400\n")
         );
     }
 
@@ -34,7 +34,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             900,
-            CylindreeSanitizer::clean("900 cm3")
+            (new CylindreeSanitizer)->clean("900 cm3")
         );
     }
 
@@ -42,7 +42,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             'Hello World',
-            DefaultSanitizer::clean("\n\n  \nHello World\n   \n")
+            (new DefaultSanitizer)->clean("\n\n  \nHello World\n   \n")
         );
     }
 
@@ -50,7 +50,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             'ma_cle',
-            KeySanitizer::clean("Ma \nClé")
+            (new KeySanitizer)->clean("Ma \nClé")
         );
     }
 
@@ -58,7 +58,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             54000,
-            KilometrageSanitizer::clean("54 000 KM")
+            (new KilometrageSanitizer)->clean("54 000 KM")
         );
     }
 
@@ -66,7 +66,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             11,
-            PiecesSanitizer::clean('11')
+            (new PiecesSanitizer)->clean('11')
         );
     }
 
@@ -74,7 +74,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             1185000,
-            PrixSanitizer::clean('1 185 000 €')
+            (new PrixSanitizer)->clean('1 185 000 €')
         );
     }
 
@@ -82,7 +82,7 @@ class SanitizerTest extends TestCase
     {
         $this->assertEquals(
             450,
-            SurfaceSanitizer::clean('450 m2')
+            (new SurfaceSanitizer)->clean('450 m2')
         );
     }
 }

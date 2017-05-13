@@ -77,7 +77,7 @@ abstract class CrawlerAbstract
     ) {
         if ($callback == null) {
             $callback = function ($value) {
-                return DefaultSanitizer::clean($value);
+                return (new DefaultSanitizer)->clean($value);
             };
         }
 

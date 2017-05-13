@@ -75,7 +75,7 @@ class AdCrawler extends CrawlerAbstract
                         if (preg_match('/thumb/', $image)) {
                             array_push(
                                 $images['images_thumbs'],
-                                (string)Http::createFromString($image)
+                                (string) Http::createFromString($image)
                                     ->withScheme($this->sheme)
                             );
 
@@ -84,7 +84,7 @@ class AdCrawler extends CrawlerAbstract
 
                         array_push(
                             $images['images'],
-                            (string)Http::createFromString($image)
+                            (string) Http::createFromString($image)
                                 ->withScheme($this->sheme)
                         );
                     }
@@ -106,14 +106,14 @@ class AdCrawler extends CrawlerAbstract
         $node = $node ?: $this->node;
 
         $properties = [
-            'titre'      => DefaultSanitizer::clean(
+            'titre'      => (new DefaultSanitizer)->clean(
                 $node->filter('h1')->text()
             ),
             'created_at' => $node
                 ->filter('*[itemprop=availabilityStarts]')
                 ->first()
                 ->attr('content'),
-            'is_pro' => ($node->filter('.ispro')->count()),
+            'is_pro'     => ($node->filter('.ispro')->count()),
         ];
 
         $node->filter('h2')
@@ -144,7 +144,7 @@ class AdCrawler extends CrawlerAbstract
             'description' => $this->getFieldValue(
                 $node->filter("p[itemprop=description]"),
                 null
-            )
+            ),
         ];
     }
 
@@ -158,21 +158,23 @@ class AdCrawler extends CrawlerAbstract
      */
     private function sanitize($key, $value)
     {
-        $key = KeySanitizer::clean($key);
+        $key = (new KeySanitizer)->clean($key);
 
         if ($key == 'ville') {
             return [
-                'ville' => CitySanitizer::clean($value),
-                'cp'    => CpSanitizer::clean($value),
+                'ville' => (new CitySanitizer)->clean($value),
+                'cp'    => (new CpSanitizer)->clean($value),
             ];
         }
 
-        $filterName = 'Lbc\\Filter\\' . ucfirst($key) . 'Sanitizer';
+        $filteClass = 'Lbc\\Filter\\' . ucfirst($key) . 'Sanitizer';
 
-        if (!class_exists($filterName)) {
-            $filterName = 'Lbc\\Filter\\DefaultSanitizer';
+        if (!class_exists($filteClass)) {
+            $filteClass = 'Lbc\\Filter\\DefaultSanitizer';
         }
 
-        return [$key => call_user_func("$filterName::clean", $value)];
+        return [
+            $key => call_user_func_array([(new $filteClass), 'clean'], [$value]),
+        ];
     }
 }

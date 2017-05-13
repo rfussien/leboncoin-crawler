@@ -59,7 +59,7 @@ class SearchResultAdCrawler extends CrawlerAbstract
             $this->node->filter('*[itemprop=price]'),
             0,
             function ($value) {
-                return PrixSanitizer::clean($value);
+                return (new PrixSanitizer)->clean($value);
             }
         );
     }
